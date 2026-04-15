@@ -1,0 +1,4672 @@
+{
+  "paper": {
+    "width": "100%",
+    "height": "100%",
+    "gridSize": 10,
+    "drawGrid": true,
+    "background": {
+      "color": "#f0f4f8"
+    },
+    "interaction": {
+      "linkPinning": false,
+      "snapLinks": true,
+      "markAvailable": true
+    },
+    "defaultLink": {
+      "type": "orthogonal-rounded",
+      "router": {
+        "name": "orthogonal"
+      },
+      "connector": {
+        "name": "rounded",
+        "args": {
+          "radius": 2
+        }
+      }
+    },
+    "ports": {
+      "defaultPort": {
+        "groups": {
+          "in": {
+            "position": "left",
+            "attrs": {
+              "portBody": {
+                "magnet": true,
+                "width": 8,
+                "height": 8,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 4,
+                "ry": 4,
+                "visibility": "visible"
+              }
+            },
+            "label": {
+              "position": {
+                "name": "left",
+                "args": {
+                  "y": 10
+                }
+              }
+            }
+          },
+          "out": {
+            "position": "right",
+            "attrs": {
+              "portBody": {
+                "magnet": true,
+                "width": 8,
+                "height": 8,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 4,
+                "ry": 4,
+                "visibility": "visible"
+              }
+            },
+            "label": {
+              "position": {
+                "name": "right",
+                "args": {
+                  "y": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "validation": {
+      "preventTargetFromOut": true,
+      "preventSourceFromIn": true
+    }
+  },
+  "elementDefinitions": {
+    "GLSRTank": {
+      "type": "element",
+      "size": {
+        "width": 160,
+        "height": 120
+      },
+      "ports": {
+        "groups": {
+          "in": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 10,
+                "y": 30
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 4,
+                "ry": 4,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          },
+          "out": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 172,
+                "y": 60
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 4,
+                "ry": 4,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "circle",
+          "selector": "ltCircle"
+        },
+        {
+          "tagName": "text",
+          "selector": "ltLabel"
+        },
+        {
+          "tagName": "rect",
+          "selector": "foundation"
+        },
+        {
+          "tagName": "rect",
+          "selector": "tankBody"
+        },
+        {
+          "tagName": "path",
+          "selector": "tankRoof"
+        },
+        {
+          "tagName": "rect",
+          "selector": "liquid"
+        },
+        {
+          "tagName": "rect",
+          "selector": "liquidSurface"
+        },
+        {
+          "tagName": "text",
+          "selector": "tankLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "tankId"
+        },
+        {
+          "tagName": "text",
+          "selector": "levelIndicator"
+        }
+      ],
+      "attrs": {
+        "ltCircle": {
+          "cx": 160,
+          "cy": -13,
+          "r": 10,
+          "fill": {
+            "type": "radialGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#E0E0E0"
+              },
+              {
+                "offset": "50%",
+                "color": "#B0B0B0"
+              },
+              {
+                "offset": "100%",
+                "color": "#2F4F4F"
+              }
+            ]
+          },
+          "stroke": "#1E3A5F",
+          "strokeWidth": 2
+        },
+        "ltLabel": {
+          "text": "LT",
+          "x": 160,
+          "y": -10,
+          "textAnchor": "middle",
+          "fontSize": 8,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#FFFFFF"
+        },
+        "foundation": {
+          "x": 5,
+          "y": 82,
+          "width": 170,
+          "height": 30,
+          "fill": "#8B7355",
+          "stroke": "#654321",
+          "strokeWidth": 2
+        },
+        "tankBody": {
+          "x": 15,
+          "y": 0,
+          "width": 150,
+          "height": 80,
+          "stroke": "#2F4F4F",
+          "strokeWidth": 5,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#708090"
+              },
+              {
+                "offset": "30%",
+                "color": "#778899"
+              },
+              {
+                "offset": "70%",
+                "color": "#778899"
+              },
+              {
+                "offset": "100%",
+                "color": "#2F4F4F"
+              }
+            ]
+          }
+        },
+        "tankRoof": {
+          "d": "M 15 0 Q 85 -30 165 0",
+          "stroke": "#2F4F4F",
+          "strokeWidth": 3,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#708090"
+              },
+              {
+                "offset": "30%",
+                "color": "#778899"
+              },
+              {
+                "offset": "70%",
+                "color": "#778899"
+              },
+              {
+                "offset": "100%",
+                "color": "#2F4F4F"
+              }
+            ]
+          }
+        },
+        "liquid": {
+          "x": 15,
+          "y": 0,
+          "width": 150,
+          "height": 95,
+          "fill": "#38b2f8",
+          "fillOpacity": 0.7
+        },
+        "liquidSurface": {
+          "x": 15,
+          "y": -1,
+          "width": 150,
+          "height": 2,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#87CEEB"
+              },
+              {
+                "offset": "50%",
+                "color": "#1E90FF"
+              },
+              {
+                "offset": "100%",
+                "color": "#87CEEB"
+              }
+            ]
+          },
+          "fillOpacity": 0.8
+        },
+        "tankLabel": {
+          "text": "",
+          "x": 100,
+          "y": -46,
+          "textAnchor": "middle",
+          "fontSize": 10,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#A9A9A9"
+        },
+        "tankId": {
+          "text": "",
+          "x": 95,
+          "y": -32,
+          "textAnchor": "middle",
+          "fontSize": 8,
+          "fontFamily": "Arial",
+          "fill": "#A9A9A9"
+        },
+        "levelIndicator": {
+          "text": "",
+          "x": 90,
+          "y": 45,
+          "textAnchor": "middle",
+          "fontSize": 14,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#4d5050"
+        }
+      }
+    },
+    "OHTank": {
+      "type": "element",
+      "size": {
+        "width": 200,
+        "height": 140
+      },
+      "ports": {
+        "groups": {
+          "in": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 30,
+                "y": 30
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 4,
+                "ry": 4,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          },
+          "out": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 172,
+                "y": 68
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 4,
+                "ry": 4,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "circle",
+          "selector": "ltCircle"
+        },
+        {
+          "tagName": "text",
+          "selector": "ltLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "tankLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "tankId"
+        },
+        {
+          "tagName": "path",
+          "selector": "legLeft"
+        },
+        {
+          "tagName": "path",
+          "selector": "legRight"
+        },
+        {
+          "tagName": "path",
+          "selector": "braceLeft"
+        },
+        {
+          "tagName": "path",
+          "selector": "braceRight"
+        },
+        {
+          "tagName": "path",
+          "selector": "base"
+        },
+        {
+          "tagName": "rect",
+          "selector": "tankBody"
+        },
+        {
+          "tagName": "path",
+          "selector": "tankTop"
+        },
+        {
+          "tagName": "rect",
+          "selector": "liquid"
+        },
+        {
+          "tagName": "rect",
+          "selector": "liquidSurface"
+        },
+        {
+          "tagName": "text",
+          "selector": "levelIndicator"
+        }
+      ],
+      "attrs": {
+        "ltCircle": {
+          "cx": 160,
+          "cy": -13,
+          "r": 10,
+          "fill": {
+            "type": "radialGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#E0E0E0"
+              },
+              {
+                "offset": "50%",
+                "color": "#B0B0B0"
+              },
+              {
+                "offset": "100%",
+                "color": "#2F4F4F"
+              }
+            ]
+          },
+          "stroke": "#1E3A5F",
+          "strokeWidth": 2
+        },
+        "ltLabel": {
+          "text": "LT",
+          "x": 160,
+          "y": -10,
+          "textAnchor": "middle",
+          "fontSize": 8,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#FFFFFF"
+        },
+        "tankLabel": {
+          "text": "",
+          "x": 100,
+          "y": -38,
+          "textAnchor": "middle",
+          "fontSize": 10,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#A9A9A9"
+        },
+        "tankId": {
+          "text": "",
+          "x": 100,
+          "y": -25,
+          "textAnchor": "middle",
+          "fontSize": 8,
+          "fontFamily": "Arial",
+          "fill": "#A9A9A9"
+        },
+        "legLeft": {
+          "d": "M 55 80 v 80 M 48 160 h 14",
+          "stroke": "#8B7355",
+          "strokeWidth": 8,
+          "strokeLinecap": "round"
+        },
+        "legRight": {
+          "d": "M 145 80 v 80 M 138 160 h 14",
+          "stroke": "#8B7355",
+          "strokeWidth": 8,
+          "strokeLinecap": "round"
+        },
+        "braceLeft": {
+          "d": "M 42 70 L 55 80",
+          "stroke": "#696969",
+          "strokeWidth": 4,
+          "strokeLinecap": "round"
+        },
+        "braceRight": {
+          "d": "M 158 70 L 145 80",
+          "stroke": "#696969",
+          "strokeWidth": 4,
+          "strokeLinecap": "round"
+        },
+        "base": {
+          "d": "M 35 80 L 48 100 L 152 100 L 165 80",
+          "stroke": "#654321",
+          "strokeWidth": 2,
+          "fill": "#8B7355",
+          "fillOpacity": 1
+        },
+        "tankBody": {
+          "x": 35,
+          "y": 0,
+          "width": 130,
+          "height": 80,
+          "rx": 6,
+          "ry": 6,
+          "stroke": "#2F4F4F",
+          "strokeWidth": 3,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#708090"
+              },
+              {
+                "offset": "30%",
+                "color": "#778899"
+              },
+              {
+                "offset": "70%",
+                "color": "#778899"
+              },
+              {
+                "offset": "100%",
+                "color": "#2F4F4F"
+              }
+            ]
+          }
+        },
+        "tankTop": {
+          "d": "M 35 0 Q 100 -25 165 0",
+          "stroke": "#2F4F4F",
+          "strokeWidth": 3,
+          "fill": "#708090"
+        },
+        "liquid": {
+          "x": 40,
+          "y": 0,
+          "width": 120,
+          "height": 80,
+          "rx": 5,
+          "ry": 5,
+          "fill": "#38b2f8",
+          "fillOpacity": 0.7
+        },
+        "liquidSurface": {
+          "x": 40,
+          "y": -1,
+          "width": 120,
+          "height": 2,
+          "rx": 5,
+          "ry": 5,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#87CEEB"
+              },
+              {
+                "offset": "50%",
+                "color": "#1E90FF"
+              },
+              {
+                "offset": "100%",
+                "color": "#87CEEB"
+              }
+            ]
+          },
+          "fillOpacity": 0.8
+        },
+        "levelIndicator": {
+          "text": "",
+          "x": 100,
+          "y": 45,
+          "textAnchor": "middle",
+          "fontSize": 14,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#4d5050"
+        }
+      }
+    },
+    "FlowMeter": {
+      "type": "element",
+      "size": {
+        "width": 60,
+        "height": 53
+      },
+      "ports": {
+        "groups": {
+          "in": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 20,
+                "y": 26
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 6,
+                "height": 6,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 3,
+                "ry": 3,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          },
+          "out": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 42,
+                "y": 26
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 6,
+                "height": 6,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 3,
+                "ry": 3,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "rect",
+          "selector": "meterBody"
+        },
+        {
+          "tagName": "rect",
+          "selector": "frontPanel"
+        },
+        {
+          "tagName": "rect",
+          "selector": "glassEffect"
+        },
+        {
+          "tagName": "rect",
+          "selector": "ftValueBox"
+        },
+        {
+          "tagName": "path",
+          "selector": "flowDirection"
+        },
+        {
+          "tagName": "path",
+          "selector": "inletArrow"
+        },
+        {
+          "tagName": "path",
+          "selector": "outletArrow"
+        },
+        {
+          "tagName": "rect",
+          "selector": "scaleLine1"
+        },
+        {
+          "tagName": "rect",
+          "selector": "scaleLine2"
+        },
+        {
+          "tagName": "rect",
+          "selector": "scaleLine3"
+        },
+        {
+          "tagName": "rect",
+          "selector": "flowIndicator"
+        },
+        {
+          "tagName": "text",
+          "selector": "meterLabelLine1"
+        },
+        {
+          "tagName": "text",
+          "selector": "meterLabelLine2"
+        },
+        {
+          "tagName": "text",
+          "selector": "ftLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "flowValue"
+        },
+        {
+          "tagName": "text",
+          "selector": "unitLabel"
+        },
+        {
+          "tagName": "circle",
+          "selector": "statusLED"
+        }
+      ],
+      "attrs": {
+        "meterBody": {
+          "x": 8,
+          "y": 4,
+          "width": 44,
+          "height": 43,
+          "rx": 4,
+          "ry": 4,
+          "stroke": "#2F4F4F",
+          "strokeWidth": 1.5,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#5D6D7E"
+              },
+              {
+                "offset": "50%",
+                "color": "#87b4e0"
+              },
+              {
+                "offset": "100%",
+                "color": "#547597"
+              }
+            ]
+          }
+        },
+        "frontPanel": {
+          "x": 12,
+          "y": 8,
+          "width": 36,
+          "height": 28,
+          "rx": 2,
+          "ry": 2,
+          "stroke": "#1A5276",
+          "strokeWidth": 1,
+          "fill": "#444547"
+        },
+        "glassEffect": {
+          "x": 13,
+          "y": 9,
+          "width": 34,
+          "height": 26,
+          "rx": 1.5,
+          "ry": 1.5,
+          "stroke": "none",
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "rgba(173, 216, 230, 0.1)"
+              },
+              {
+                "offset": "50%",
+                "color": "rgba(135, 206, 235, 0.05)"
+              },
+              {
+                "offset": "100%",
+                "color": "transparent"
+              }
+            ]
+          }
+        },
+        "ftValueBox": {
+          "x": 10,
+          "y": -27,
+          "width": 40,
+          "height": 30,
+          "rx": 2,
+          "ry": 2,
+          "fill": "#3f3d3d",
+          "stroke": "#2F4F4F",
+          "strokeWidth": 2,
+          "opacity": 0.8
+        },
+        "ftLabel": {
+          "text": "FT",
+          "x": 30,
+          "y": -14,
+          "textAnchor": "middle",
+          "fontSize": 12,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#FFFFFF"
+        },
+        "flowValue": {
+          "text": "",
+          "x": 30,
+          "y": 0,
+          "textAnchor": "middle",
+          "fontSize": 12,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#32CD32"
+        },
+        "unitLabel": {
+          "text": "",
+          "x": 30,
+          "y": 25,
+          "textAnchor": "middle",
+          "fontSize": 9,
+          "fontFamily": "Arial",
+          "fill": "#32CD32",
+          "fontWeight": "bold"
+        },
+        "flowIndicator": {
+          "x": 16,
+          "y": 39,
+          "width": 28,
+          "height": 4,
+          "rx": 1.5,
+          "ry": 1.5,
+          "fill": "#32CD32"
+        },
+        "statusLED": {
+          "cx": 52,
+          "cy": 14,
+          "r": 2,
+          "fill": "#32CD32",
+          "stroke": "#228B22",
+          "strokeWidth": 1
+        },
+        "meterLabelLine1": {
+          "text": "FLOW",
+          "x": 85,
+          "y": 50,
+          "textAnchor": "middle",
+          "fontSize": 8,
+          "fontFamily": "Arial",
+          "fill": "#A9A9A9",
+          "fontWeight": "bold"
+        },
+        "meterLabelLine2": {
+          "text": "",
+          "x": 85,
+          "y": 60,
+          "textAnchor": "middle",
+          "fontSize": 8,
+          "fontFamily": "Arial",
+          "fill": "#A9A9A9",
+          "fontWeight": "bold"
+        },
+        "scaleLine1": {
+          "x": 16,
+          "y": 37,
+          "width": 4,
+          "height": 1,
+          "fill": "#7FB3D5"
+        },
+        "scaleLine2": {
+          "x": 26,
+          "y": 37,
+          "width": 4,
+          "height": 1,
+          "fill": "#7FB3D5"
+        },
+        "scaleLine3": {
+          "x": 36,
+          "y": 37,
+          "width": 4,
+          "height": 1,
+          "fill": "#7FB3D5"
+        }
+      }
+    },
+    "WaterQualitySensor": {
+      "type": "element",
+      "size": {
+        "width": 70,
+        "height": 60
+      },
+      "ports": {
+        "groups": {
+          "in": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 40,
+                "y": 29
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 6,
+                "height": 6,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 3,
+                "ry": 3,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          },
+          "out": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 44,
+                "y": 27
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 6,
+                "height": 6,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 3,
+                "ry": 3,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "rect",
+          "selector": "labelContainer"
+        },
+        {
+          "tagName": "circle",
+          "selector": "sensorBody"
+        },
+        {
+          "tagName": "path",
+          "selector": "flowDirection"
+        },
+        {
+          "tagName": "path",
+          "selector": "inletArrow"
+        },
+        {
+          "tagName": "path",
+          "selector": "outletArrow"
+        },
+        {
+          "tagName": "path",
+          "selector": "waveLine"
+        },
+        {
+          "tagName": "text",
+          "selector": "pHLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "pHValue"
+        },
+        {
+          "tagName": "text",
+          "selector": "chlorineLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "chlorineValue"
+        },
+        {
+          "tagName": "text",
+          "selector": "turbidityLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "turbidityValue"
+        },
+        {
+          "tagName": "text",
+          "selector": "pHInsideLabel"
+        },
+        {
+          "tagName": "circle",
+          "selector": "statusDot"
+        }
+      ],
+      "attrs": {
+        "sensorBody": {
+          "cx": 32,
+          "cy": 28,
+          "r": 24,
+          "stroke": "#2F4F4F",
+          "strokeWidth": 2,
+          "fill": {
+            "type": "radialGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#818787"
+              },
+              {
+                "offset": "50%",
+                "color": "#56708a"
+              },
+              {
+                "offset": "100%",
+                "color": "#333537"
+              }
+            ]
+          }
+        },
+        "labelContainer": {
+          "x": 0,
+          "y": -30,
+          "width": 78,
+          "height": 35,
+          "fill": "#4b5864",
+          "stroke": "#32CD32",
+          "strokeWidth": 1.5,
+          "rx": 4,
+          "ry": 4
+        },
+        "pHLabel": {
+          "text": "pH",
+          "x": 12,
+          "y": -15,
+          "textAnchor": "middle",
+          "fontSize": 11,
+          "fontFamily": "Arial",
+          "fill": "white",
+          "fontWeight": "bold"
+        },
+        "pHValue": {
+          "text": "",
+          "x": 12,
+          "y": 0,
+          "textAnchor": "middle",
+          "fontSize": 11,
+          "fontFamily": "Arial",
+          "fill": "#32CD32",
+          "fontWeight": "bold"
+        },
+        "chlorineLabel": {
+          "text": "Cl",
+          "x": 32,
+          "y": -15,
+          "textAnchor": "middle",
+          "fontSize": 11,
+          "fontFamily": "Arial",
+          "fill": "white",
+          "fontWeight": "bold"
+        },
+        "chlorineValue": {
+          "text": "",
+          "x": 32,
+          "y": 0,
+          "textAnchor": "middle",
+          "fontSize": 11,
+          "fontFamily": "Arial",
+          "fill": "#32CD32",
+          "fontWeight": "bold"
+        },
+        "turbidityLabel": {
+          "text": "Turb",
+          "x": 54,
+          "y": -15,
+          "textAnchor": "middle",
+          "fontSize": 11,
+          "fontFamily": "Arial",
+          "fill": "white",
+          "fontWeight": "bold"
+        },
+        "turbidityValue": {
+          "text": "",
+          "x": 54,
+          "y": 0,
+          "textAnchor": "middle",
+          "fontSize": 11,
+          "fontFamily": "Arial",
+          "fill": "#32CD32",
+          "fontWeight": "bold"
+        },
+        "pHInsideLabel": {
+          "text": "pH",
+          "x": 32,
+          "y": 30,
+          "textAnchor": "middle",
+          "fontSize": 10,
+          "fontFamily": "Arial",
+          "fill": "#32CD32",
+          "fontWeight": "bold"
+        },
+        "statusDot": {
+          "cx": 32,
+          "cy": 40,
+          "r": 3,
+          "fill": "#32CD32",
+          "stroke": "#32CD32",
+          "strokeWidth": 1
+        },
+        "flowDirection": {
+          "d": "M 8 28 L 22 28 M 42 28 L 56 28",
+          "stroke": "#3498DB",
+          "strokeWidth": 3,
+          "strokeLinecap": "round"
+        },
+        "inletArrow": {
+          "d": "M 18 25 L 22 28 L 18 31",
+          "stroke": "#3498DB",
+          "strokeWidth": 1,
+          "fill": "none"
+        },
+        "outletArrow": {
+          "d": "M 46 25 L 42 28 L 46 31",
+          "stroke": "#3498DB",
+          "strokeWidth": 1,
+          "fill": "none"
+        },
+        "waveLine": {
+          "d": "M 20 22 Q 28 19 36 22",
+          "stroke": "#3498DB",
+          "strokeWidth": 1,
+          "fill": "none"
+        }
+      }
+    },
+    "Pipe": {
+      "type": "link",
+      "z": -1,
+      "router": {
+        "name": "normal"
+      },
+      "connector": {
+        "name": "rounded"
+      },
+      "markup": [
+        {
+          "tagName": "path",
+          "selector": "outline",
+          "attributes": {
+            "fill": "none",
+            "stroke": "#3498DB",
+            "stroke-width": 8,
+            "stroke-linejoin": "butt",
+            "stroke-linecap": "butt"
+          }
+        },
+        {
+          "tagName": "path",
+          "selector": "line",
+          "attributes": {
+            "fill": "none",
+            "stroke": "#666768",
+            "stroke-width": 5,
+            "stroke-linejoin": "butt",
+            "stroke-linecap": "butt"
+          }
+        },
+        {
+          "tagName": "path",
+          "selector": "liquid",
+          "attributes": {
+            "fill": "none",
+            "stroke": "#4169E1",
+            "stroke-width": 3,
+            "stroke-dasharray": "8,16",
+            "stroke-linejoin": "butt",
+            "stroke-linecap": "butt"
+          }
+        }
+      ],
+      "attrs": {
+        "outline": {
+          "stroke": "#3498DB",
+          "strokeWidth": 8,
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt"
+        },
+        "line": {
+          "stroke": "#666768",
+          "strokeWidth": 5,
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt"
+        },
+        "liquid": {
+          "stroke": "#4169E1",
+          "strokeWidth": 3,
+          "strokeDasharray": "8,16",
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt",
+          "opacity": 0
+        }
+      }
+    },
+    "MainPipe": {
+      "type": "link",
+      "z": 0,
+      "router": {
+        "name": "normal"
+      },
+      "connector": {
+        "name": "rounded"
+      },
+      "markup": [
+        {
+          "tagName": "path",
+          "selector": "outline",
+          "attributes": {
+            "fill": "none",
+            "stroke": "#7eabcb",
+            "stroke-width": 18,
+            "stroke-linejoin": "butt",
+            "stroke-linecap": "butt"
+          }
+        },
+        {
+          "tagName": "path",
+          "selector": "line",
+          "attributes": {
+            "fill": "none",
+            "stroke": "#666768",
+            "stroke-width": 15,
+            "stroke-linejoin": "butt",
+            "stroke-linecap": "butt"
+          }
+        },
+        {
+          "tagName": "path",
+          "selector": "liquid",
+          "attributes": {
+            "fill": "none",
+            "stroke": "#4169E1",
+            "stroke-width": 10,
+            "stroke-dasharray": "8,16",
+            "stroke-linejoin": "butt",
+            "stroke-linecap": "butt"
+          }
+        }
+      ],
+      "attrs": {
+        "outline": {
+          "stroke": "#7eabcb",
+          "strokeWidth": 18,
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt"
+        },
+        "line": {
+          "stroke": "#666768",
+          "strokeWidth": 15,
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt"
+        },
+        "liquid": {
+          "stroke": "#4169E1",
+          "strokeWidth": 10,
+          "strokeDasharray": "8,16",
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt",
+          "opacity": 0.5
+        }
+      }
+    },
+    "HeaderPipe": {
+      "type": "element",
+      "size": {
+        "width": 1330,
+        "height": 1
+      },
+      "z": 1,
+      "ports": {
+        "groups": {
+          "branch": {
+            "position": {
+              "name": "absolute"
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "magnet": true,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 1.5,
+                "rx": 4,
+                "ry": 4,
+                "cursor": "pointer",
+                "opacity": 1,
+                "visibility": "visible"
+              }
+            }
+          },
+          "in": {
+            "position": {
+              "name": "absolute"
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "magnet": true,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 1.5,
+                "rx": 4,
+                "ry": 4,
+                "cursor": "pointer",
+                "opacity": 1,
+                "visibility": "visible"
+              }
+            }
+          },
+          "out": {
+            "position": {
+              "name": "absolute"
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "magnet": true,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 1.5,
+                "rx": 4,
+                "ry": 4,
+                "cursor": "pointer",
+                "opacity": 1,
+                "visibility": "visible"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "branch1",
+            "group": "branch",
+            "args": {
+              "x": -15,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch2",
+            "group": "branch",
+            "args": {
+              "x": 20,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch3",
+            "group": "branch",
+            "args": {
+              "x": 25,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch4",
+            "group": "branch",
+            "args": {
+              "x": 453,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch5",
+            "group": "branch",
+            "args": {
+              "x": 458,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch6",
+            "group": "branch",
+            "args": {
+              "x": 920,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch7",
+            "group": "branch",
+            "args": {
+              "x": 925,
+              "y": -4
+            }
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "line",
+          "selector": "outline"
+        },
+        {
+          "tagName": "line",
+          "selector": "line"
+        },
+        {
+          "tagName": "line",
+          "selector": "liquid"
+        }
+      ],
+      "attrs": {
+        "outline": {
+          "x1": -5,
+          "y1": 0,
+          "x2": 1330,
+          "y2": 0,
+          "stroke": "#7eabcb",
+          "strokeWidth": 18,
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt",
+          "opacity": 1
+        },
+        "line": {
+          "x1": 0,
+          "y1": 0,
+          "x2": 1330,
+          "y2": 0,
+          "stroke": "#666768",
+          "strokeWidth": 15,
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt"
+        },
+        "liquid": {
+          "x1": 0,
+          "y1": 0,
+          "x2": 1330,
+          "y2": 0,
+          "stroke": "#4169E1",
+          "strokeWidth": 10,
+          "strokeDasharray": "8,16",
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt",
+          "opacity": 0.5
+        }
+      }
+    },
+    "LargeOHTank": {
+      "type": "element",
+      "size": {
+        "width": 300,
+        "height": 210
+      },
+      "ports": {
+        "groups": {
+          "in": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 45,
+                "y": 45
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 12,
+                "height": 12,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 6,
+                "ry": 6,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          },
+          "out": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 238,
+                "y": 102
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 12,
+                "height": 12,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 6,
+                "ry": 6,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "circle",
+          "selector": "ltCircle"
+        },
+        {
+          "tagName": "text",
+          "selector": "ltLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "tankLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "tankId"
+        },
+        {
+          "tagName": "path",
+          "selector": "legLeft"
+        },
+        {
+          "tagName": "path",
+          "selector": "legRight"
+        },
+        {
+          "tagName": "path",
+          "selector": "braceLeft"
+        },
+        {
+          "tagName": "path",
+          "selector": "braceRight"
+        },
+        {
+          "tagName": "path",
+          "selector": "base"
+        },
+        {
+          "tagName": "rect",
+          "selector": "tankBody"
+        },
+        {
+          "tagName": "path",
+          "selector": "tankTop"
+        },
+        {
+          "tagName": "rect",
+          "selector": "liquid"
+        },
+        {
+          "tagName": "rect",
+          "selector": "liquidSurface"
+        },
+        {
+          "tagName": "text",
+          "selector": "levelIndicator"
+        }
+      ],
+      "attrs": {
+        "ltCircle": {
+          "cx": 240,
+          "cy": -20,
+          "r": 15,
+          "fill": {
+            "type": "radialGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#E0E0E0"
+              },
+              {
+                "offset": "50%",
+                "color": "#B0B0B0"
+              },
+              {
+                "offset": "100%",
+                "color": "#2F4F4F"
+              }
+            ]
+          },
+          "stroke": "#1E3A5F",
+          "strokeWidth": 2
+        },
+        "ltLabel": {
+          "text": "LT",
+          "x": 240,
+          "y": -15,
+          "textAnchor": "middle",
+          "fontSize": 12,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#FFFFFF"
+        },
+        "tankLabel": {
+          "text": "",
+          "x": 150,
+          "y": -57,
+          "textAnchor": "middle",
+          "fontSize": 15,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#A9A9A9"
+        },
+        "tankId": {
+          "text": "",
+          "x": 150,
+          "y": -38,
+          "textAnchor": "middle",
+          "fontSize": 12,
+          "fontFamily": "Arial",
+          "fill": "#A9A9A9"
+        },
+        "legLeft": {
+          "d": "M 82 120 v 120 M 72 240 h 21",
+          "stroke": "#8B7355",
+          "strokeWidth": 12,
+          "strokeLinecap": "round"
+        },
+        "legRight": {
+          "d": "M 218 120 v 120 M 207 240 h 21",
+          "stroke": "#8B7355",
+          "strokeWidth": 12,
+          "strokeLinecap": "round"
+        },
+        "braceLeft": {
+          "d": "M 63 105 L 82 120",
+          "stroke": "#696969",
+          "strokeWidth": 6,
+          "strokeLinecap": "round"
+        },
+        "braceRight": {
+          "d": "M 237 105 L 218 120",
+          "stroke": "#696969",
+          "strokeWidth": 6,
+          "strokeLinecap": "round"
+        },
+        "base": {
+          "d": "M 52 120 L 72 150 L 228 150 L 248 120",
+          "stroke": "#654321",
+          "strokeWidth": 2,
+          "fill": "#8B7355",
+          "fillOpacity": 1
+        },
+        "tankBody": {
+          "x": 52,
+          "y": 0,
+          "width": 195,
+          "height": 120,
+          "rx": 9,
+          "ry": 9,
+          "stroke": "#2F4F4F",
+          "strokeWidth": 3,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#708090"
+              },
+              {
+                "offset": "30%",
+                "color": "#778899"
+              },
+              {
+                "offset": "70%",
+                "color": "#778899"
+              },
+              {
+                "offset": "100%",
+                "color": "#2F4F4F"
+              }
+            ]
+          }
+        },
+        "tankTop": {
+          "d": "M 52 0 Q 150 -38 248 0",
+          "stroke": "#2F4F4F",
+          "strokeWidth": 3,
+          "fill": "#708090"
+        },
+        "liquid": {
+          "x": 60,
+          "y": 0,
+          "width": 180,
+          "height": 120,
+          "rx": 7,
+          "ry": 7,
+          "fill": "#38b2f8",
+          "fillOpacity": 0.7
+        },
+        "liquidSurface": {
+          "x": 60,
+          "y": 0,
+          "width": 180,
+          "height": 3,
+          "rx": 7,
+          "ry": 7,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#87CEEB"
+              },
+              {
+                "offset": "50%",
+                "color": "#1E90FF"
+              },
+              {
+                "offset": "100%",
+                "color": "#87CEEB"
+              }
+            ]
+          },
+          "fillOpacity": 0.8
+        },
+        "levelIndicator": {
+          "text": "",
+          "x": 150,
+          "y": 68,
+          "textAnchor": "middle",
+          "fontSize": 21,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#4d5050"
+        }
+      }
+    },
+    "HandValve": {
+      "type": "element",
+      "size": {
+        "width": 50,
+        "height": 50
+      },
+      "ports": {
+        "groups": {
+          "in": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 20,
+                "y": 25
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 2,
+                "height": 2,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 0.5,
+                "rx": 1,
+                "ry": 1,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          },
+          "out": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 37,
+                "y": 25
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 2,
+                "height": 2,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 0.5,
+                "rx": 1,
+                "ry": 1,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "rect",
+          "selector": "stem"
+        },
+        {
+          "tagName": "rect",
+          "selector": "handwheel"
+        },
+        {
+          "tagName": "ellipse",
+          "selector": "body"
+        },
+        {
+          "tagName": "rect",
+          "selector": "coverFrame"
+        },
+        {
+          "tagName": "rect",
+          "selector": "cover"
+        },
+        {
+          "tagName": "path",
+          "selector": "liquid"
+        },
+        {
+          "tagName": "text",
+          "selector": "label"
+        }
+      ],
+      "attrs": {
+        "body": {
+          "rx": 18,
+          "ry": 18,
+          "cx": 25,
+          "cy": 25,
+          "stroke": "#4a7fa5",
+          "strokeWidth": 2,
+          "fill": {
+            "type": "radialGradient",
+            "stops": [
+              {
+                "offset": "60%",
+                "color": "#d0e8f7"
+              },
+              {
+                "offset": "100%",
+                "color": "#7eabcb"
+              }
+            ]
+          }
+        },
+        "stem": {
+          "x": 20,
+          "y": -18,
+          "width": 10,
+          "height": 20,
+          "stroke": "#333",
+          "strokeWidth": 1.5,
+          "fill": "#555"
+        },
+        "handwheel": {
+          "x": -8,
+          "y": -22,
+          "width": 66,
+          "height": 9,
+          "stroke": "#222",
+          "strokeWidth": 1.5,
+          "rx": 4,
+          "ry": 4,
+          "fill": "#444"
+        },
+        "coverFrame": {
+          "x": 0,
+          "y": 19,
+          "width": 50,
+          "height": 12,
+          "fill": "none",
+          "stroke": "#4a7fa5",
+          "strokeWidth": 1
+        },
+        "cover": {
+          "x": 0,
+          "y": 19,
+          "width": 50,
+          "height": 12,
+          "fill": "#7eabcb",
+          "opacity": 0.6
+        },
+        "liquid": {
+          "d": "M 0 0 H 22",
+          "transform": "translate(14, 25)",
+          "stroke": "#4da3ff",
+          "strokeWidth": 3,
+          "fill": "none",
+          "strokeDasharray": "6 6"
+        },
+        "label": {
+          "text": "",
+          "x": 25,
+          "y": 58,
+          "textAnchor": "middle",
+          "fontSize": 8,
+          "fontFamily": "Arial",
+          "fill": "#A9A9A9"
+        }
+      }
+    },
+    "ConicTank": {
+      "type": "element",
+      "size": {
+        "width": 360,
+        "height": 165
+      },
+      "ports": {
+        "groups": {
+          "out": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 180,
+                "y": 242
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 2,
+                "height": 2,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 0.5,
+                "rx": 1,
+                "ry": 1,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "path",
+          "selector": "bottom"
+        },
+        {
+          "tagName": "rect",
+          "selector": "liquid"
+        },
+        {
+          "tagName": "rect",
+          "selector": "liquidSurface"
+        },
+        {
+          "tagName": "rect",
+          "selector": "body"
+        },
+        {
+          "tagName": "rect",
+          "selector": "top"
+        },
+        {
+          "tagName": "text",
+          "selector": "tankLabel"
+        },
+        {
+          "tagName": "text",
+          "selector": "levelIndicator"
+        }
+      ],
+      "attrs": {
+        "body": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 200,
+          "rx": 20,
+          "ry": 10,
+          "stroke": "#4a7fa5",
+          "strokeWidth": 3,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#7eabcb"
+              },
+              {
+                "offset": "30%",
+                "color": "#cce4f6"
+              },
+              {
+                "offset": "70%",
+                "color": "#cce4f6"
+              },
+              {
+                "offset": "100%",
+                "color": "#7eabcb"
+              }
+            ]
+          }
+        },
+        "top": {
+          "x": 4,
+          "y": 0,
+          "width": 352,
+          "height": 50,
+          "rx": 18,
+          "ry": 10,
+          "stroke": "#4a7fa5",
+          "strokeWidth": 2,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#7eabcb"
+              },
+              {
+                "offset": "50%",
+                "color": "#d0e8f7"
+              },
+              {
+                "offset": "100%",
+                "color": "#7eabcb"
+              }
+            ]
+          }
+        },
+        "bottom": {
+          "d": "M 0 100 L 360 100 L 180 165 Z",
+          "transform": "translate(0, 95)",
+          "stroke": "#4a7fa5",
+          "strokeLinejoin": "round",
+          "strokeWidth": 2,
+          "fill": {
+            "type": "linearGradient",
+            "stops": [
+              {
+                "offset": "0%",
+                "color": "#7eabcb"
+              },
+              {
+                "offset": "40%",
+                "color": "#d0e8f7"
+              },
+              {
+                "offset": "100%",
+                "color": "#7eabcb"
+              }
+            ]
+          }
+        },
+        "liquid": {
+          "x": 4,
+          "y": 80,
+          "width": 352,
+          "height": 0,
+          "fill": "#38b2f8",
+          "opacity": 0.82
+        },
+        "liquidSurface": {
+          "x": 4,
+          "y": 80,
+          "width": 152,
+          "height": 3,
+          "fill": "#87CEEB",
+          "opacity": 0.7
+        },
+        "tankLabel": {
+          "text": "Source",
+          "x": 180,
+          "y": -14,
+          "textAnchor": "middle",
+          "fontSize": 24,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#A9A9A9"
+        },
+        "levelIndicator": {
+          "text": "0%",
+          "x": 180,
+          "y": 120,
+          "textAnchor": "middle",
+          "textVerticalAnchor": "middle",
+          "fontSize": 18,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "rgba(255,255,255,0.92)"
+        }
+      }
+    },
+    "Pump": {
+      "type": "element",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "markup": [
+        {
+          "tagName": "rect",
+          "selector": "pipeLeft"
+        },
+        {
+          "tagName": "rect",
+          "selector": "pipeRight"
+        },
+        {
+          "tagName": "circle",
+          "selector": "outerRing"
+        },
+        {
+          "tagName": "circle",
+          "selector": "rotorFrame"
+        },
+        {
+          "tagName": "circle",
+          "selector": "hub"
+        },
+        {
+          "tagName": "path",
+          "selector": "rotor"
+        },
+        {
+          "tagName": "text",
+          "selector": "label"
+        }
+      ],
+      "attrs": {
+        "outerRing": {
+          "r": 30,
+          "cx": "calc(w/2)",
+          "cy": "calc(h/2)",
+          "fill": "#5793cf",
+          "stroke": "#555",
+          "strokeWidth": 3
+        },
+        "rotorFrame": {
+          "r": 24,
+          "cx": "calc(w/2)",
+          "cy": "calc(h/2)",
+          "fill": "#778899",
+          "stroke": "#2F4F4F",
+          "strokeWidth": 3
+        },
+        "hub": {
+          "r": 8,
+          "cx": "calc(w/2)",
+          "cy": "calc(h/2)",
+          "fill": "#8eb5dc",
+          "stroke": "#1E3A5F",
+          "strokeWidth": 1
+        },
+        "rotor": {
+          "d": "M 0,-18 L 6,-6 L 18,0 L 6,6 L 0,18 L -6,6 L -18,0 L -6,-6 Z",
+          "transform": "translate(calc(w/2),calc(h/2))",
+          "fill": "#5793cf",
+          "stroke": "#2F4F4F",
+          "strokeWidth": 3
+        },
+        "pipeLeft": {
+          "x": -24,
+          "y": "calc(h/2 - 6)",
+          "width": 28,
+          "height": 12,
+          "fill": "#778899",
+          "stroke": "##2F4F4F",
+          "strokeWidth": 1.5,
+          "rx": 2
+        },
+        "pipeRight": {
+          "x": "calc(w - 4)",
+          "y": "calc(h/2 - 6)",
+          "width": 28,
+          "height": 12,
+          "fill": "#778899",
+          "stroke": "##2c3e50",
+          "strokeWidth": 1.5,
+          "rx": 2
+        },
+        "label": {
+          "text": "Pump",
+          "textAnchor": "middle",
+          "textVerticalAnchor": "top",
+          "x": "calc(w/2)",
+          "y": "calc(h + 8)",
+          "fontSize": 11,
+          "fontFamily": "Arial",
+          "fontWeight": "bold",
+          "fill": "#333"
+        }
+      },
+      "ports": {
+        "groups": {
+          "left": {
+            "position": {
+              "name": "left"
+            },
+            "attrs": {
+              "portBody": {
+                "r": 5,
+                "magnet": true,
+                "fill": "#888",
+                "stroke": "#444",
+                "strokeWidth": 1.5
+              }
+            }
+          },
+          "right": {
+            "position": {
+              "name": "right"
+            },
+            "attrs": {
+              "portBody": {
+                "r": 5,
+                "magnet": true,
+                "fill": "#888",
+                "stroke": "#444",
+                "strokeWidth": 1.5
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "left",
+            "group": "left"
+          },
+          {
+            "id": "right",
+            "group": "right"
+          }
+        ]
+      }
+    },
+    "VerticalHeaderPipe": {
+      "type": "element",
+      "size": {
+        "width": 20,
+        "height": 200
+      },
+      "ports": {
+        "groups": {
+          "in": {
+            "position": {
+              "name": "absolute",
+              "args": {
+                "x": 0,
+                "y": 100
+              }
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 4,
+                "ry": 4,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          },
+          "branch": {
+            "position": {
+              "name": "absolute"
+            },
+            "attrs": {
+              "portBody": {
+                "width": 8,
+                "height": 8,
+                "fill": "#A9A9A9",
+                "stroke": "#5a5a5a",
+                "strokeWidth": 2,
+                "rx": 4,
+                "ry": 4,
+                "magnet": true,
+                "cursor": "pointer"
+              }
+            }
+          }
+        },
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in",
+            "args": {
+              "x": -20,
+              "y": 100
+            }
+          },
+          {
+            "id": "branch1",
+            "group": "branch",
+            "args": {
+              "x": 20,
+              "y": -250
+            }
+          },
+          {
+            "id": "branch2",
+            "group": "branch",
+            "args": {
+              "x": 20,
+              "y": -110
+            }
+          },
+          {
+            "id": "branch3",
+            "group": "branch",
+            "args": {
+              "x": 20,
+              "y": 40
+            }
+          },
+          {
+            "id": "branch4",
+            "group": "branch",
+            "args": {
+              "x": 20,
+              "y": 190
+            }
+          },
+          {
+            "id": "branch5",
+            "group": "branch",
+            "args": {
+              "x": 20,
+              "y": 320
+            }
+          },
+          {
+            "id": "branch6",
+            "group": "branch",
+            "args": {
+              "x": 20,
+              "y": 450
+            }
+          }
+        ]
+      },
+      "markup": [
+        {
+          "tagName": "rect",
+          "selector": "pipeBody"
+        }
+      ],
+      "attrs": {
+        "pipeBody": {
+          "x": 0,
+          "y": -300,
+          "width": 20,
+          "height": 800,
+          "fill": "#7eabcb",
+          "stroke": "#2F4F4F",
+          "strokeWidth": 2
+        }
+      }
+    },
+    "ZoneLabel": {
+      "type": "element",
+      "size": {
+        "width": 60,
+        "height": 20
+      },
+      "markup": [
+        {
+          "tagName": "text",
+          "selector": "zoneText"
+        }
+      ],
+      "attrs": {
+        "zoneText": {
+          "text": "Zone",
+          "x": 30,
+          "y": 10,
+          "textAnchor": "middle",
+          "textVerticalAnchor": "middle",
+          "fontSize": 12,
+          "fontFamily": "Arial",
+          "fill": "#2c3e50"
+        }
+      }
+    }
+  },
+  "instances": [
+    {
+      "id": "conic-tank-001",
+      "type": "ConicTank",
+      "position": {
+        "x": -260,
+        "y": -60
+      },
+      "attrs": {
+        "tankLabel": {
+          "text": "Sump / Source"
+        },
+        "levelIndicator": {
+          "text": "75%"
+        }
+      },
+      "z": 1
+    },
+    {
+      "id": "glsr-01",
+      "type": "GLSRTank",
+      "position": {
+        "x": 230,
+        "y": 555
+      },
+      "attrs": {
+        "tankLabel": {
+          "text": "Gangamma Temple - Zone 9"
+        },
+        "tankId": {
+          "text": "GLSR-01"
+        },
+        "levelIndicator": {
+          "text": "70%"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "glsr-02",
+      "type": "GLSRTank",
+      "position": {
+        "x": 668,
+        "y": 555
+      },
+      "attrs": {
+        "tankLabel": {
+          "text": "Meher Nagara - Zone 6"
+        },
+        "tankId": {
+          "text": "GLSR-02"
+        },
+        "levelIndicator": {
+          "text": "60%"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "glsr-03",
+      "type": "GLSRTank",
+      "position": {
+        "x": 1128,
+        "y": 555
+      },
+      "attrs": {
+        "tankLabel": {
+          "text": "Guttahalli - Zone 1"
+        },
+        "tankId": {
+          "text": "GLSR-03"
+        },
+        "levelIndicator": {
+          "text": "80%"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "oht-01",
+      "type": "OHTank",
+      "position": {
+        "x": 200,
+        "y": 20
+      },
+      "attrs": {
+        "tankLabel": {
+          "text": "Kumar Swamy Layout - Zone 4"
+        },
+        "tankId": {
+          "text": "OHT-01"
+        },
+        "levelIndicator": {
+          "text": "50%"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "oht-02",
+      "type": "OHTank",
+      "position": {
+        "x": 633,
+        "y": 20
+      },
+      "attrs": {
+        "tankLabel": {
+          "text": "Nearby GLSR 1 - Zone 7"
+        },
+        "tankId": {
+          "text": "OHT-02"
+        },
+        "levelIndicator": {
+          "text": "40%"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "oht-03",
+      "type": "OHTank",
+      "position": {
+        "x": 1100,
+        "y": 20
+      },
+      "attrs": {
+        "tankLabel": {
+          "text": "Stadium Road - Zone 2"
+        },
+        "tankId": {
+          "text": "OHT-03"
+        },
+        "levelIndicator": {
+          "text": "30%"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "header-pipe-main",
+      "type": "HeaderPipe",
+      "position": {
+        "x": 210,
+        "y": 330
+      },
+      "size": {
+        "width": 1330,
+        "height": 1
+      },
+      "attrs": {
+        "outline": {
+          "stroke": "#7eabcb",
+          "strokeWidth": 18,
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt"
+        },
+        "line": {
+          "stroke": "#666768",
+          "strokeWidth": 15,
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt"
+        },
+        "liquid": {
+          "stroke": "#4169E1",
+          "strokeWidth": 10,
+          "strokeDasharray": "8,16",
+          "strokeLinejoin": "butt",
+          "strokeLinecap": "butt",
+          "opacity": 0.5
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "branch1",
+            "group": "branch",
+            "args": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch2",
+            "group": "branch",
+            "args": {
+              "x": 20,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch3",
+            "group": "branch",
+            "args": {
+              "x": 25,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch4",
+            "group": "branch",
+            "args": {
+              "x": 453,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch5",
+            "group": "branch",
+            "args": {
+              "x": 464,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch6",
+            "group": "branch",
+            "args": {
+              "x": 920,
+              "y": 0
+            }
+          },
+          {
+            "id": "branch7",
+            "group": "branch",
+            "args": {
+              "x": 928,
+              "y": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "wqs-001",
+      "type": "WaterQualitySensor",
+      "position": {
+        "x": -120,
+        "y": 305
+      },
+      "attrs": {
+        "pHValue": {
+          "text": "6.5"
+        },
+        "chlorineValue": {
+          "text": "2.0"
+        },
+        "turbidityValue": {
+          "text": "1.0"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flowmeter-001",
+      "type": "FlowMeter",
+      "position": {
+        "x": 0,
+        "y": 305
+      },
+      "attrs": {
+        "flowValue": {
+          "text": "50.0"
+        },
+        "unitLabel": {
+          "text": "m³/h"
+        },
+        "meterLabelLine1": {
+          "text": "Water Tapping Point"
+        },
+        "meterLabelLine2": {
+          "text": "@M A G Circle"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wqs-glsr-01",
+      "type": "WaterQualitySensor",
+      "position": {
+        "x": 420,
+        "y": 587
+      },
+      "attrs": {
+        "pHValue": {
+          "text": "6.6"
+        },
+        "chlorineValue": {
+          "text": "1.9"
+        },
+        "turbidityValue": {
+          "text": "1.1"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flowmeter-glsr-01",
+      "type": "FlowMeter",
+      "position": {
+        "x": 520,
+        "y": 587
+      },
+      "attrs": {
+        "flowValue": {
+          "text": "85.0"
+        },
+        "unitLabel": {
+          "text": "m³/h"
+        },
+        "meterLabelLine1": {
+          "text": "Zone-09"
+        },
+        "meterLabelLine2": {
+          "text": "DISTRIBUTION"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wqs-glsr-02",
+      "type": "WaterQualitySensor",
+      "position": {
+        "x": 863,
+        "y": 587
+      },
+      "attrs": {
+        "pHValue": {
+          "text": "6.7"
+        },
+        "chlorineValue": {
+          "text": "1.8"
+        },
+        "turbidityValue": {
+          "text": "1.2"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flowmeter-glsr-02",
+      "type": "FlowMeter",
+      "position": {
+        "x": 963,
+        "y": 587
+      },
+      "attrs": {
+        "flowValue": {
+          "text": "70.0"
+        },
+        "unitLabel": {
+          "text": "m³/h"
+        },
+        "meterLabelLine1": {
+          "text": "Zone-06"
+        },
+        "meterLabelLine2": {
+          "text": "DISTRIBUTION"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wqs-glsr-03",
+      "type": "WaterQualitySensor",
+      "position": {
+        "x": 1325,
+        "y": 587
+      },
+      "attrs": {
+        "pHValue": {
+          "text": "6.8"
+        },
+        "chlorineValue": {
+          "text": "1.7"
+        },
+        "turbidityValue": {
+          "text": "1.3"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flowmeter-glsr-03",
+      "type": "FlowMeter",
+      "position": {
+        "x": 1425,
+        "y": 587
+      },
+      "attrs": {
+        "flowValue": {
+          "text": "60.0"
+        },
+        "unitLabel": {
+          "text": "m³/h"
+        },
+        "meterLabelLine1": {
+          "text": "Zone-01"
+        },
+        "meterLabelLine2": {
+          "text": "DISTRIBUTION"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wqs-oht-01",
+      "type": "WaterQualitySensor",
+      "position": {
+        "x": 412,
+        "y": 60
+      },
+      "attrs": {
+        "pHValue": {
+          "text": "6.4"
+        },
+        "chlorineValue": {
+          "text": "2.1"
+        },
+        "turbidityValue": {
+          "text": "0.9"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flowmeter-oht-01",
+      "type": "FlowMeter",
+      "position": {
+        "x": 515,
+        "y": 60
+      },
+      "attrs": {
+        "flowValue": {
+          "text": "60.0"
+        },
+        "unitLabel": {
+          "text": "m³/h"
+        },
+        "meterLabelLine1": {
+          "text": "Zone-04"
+        },
+        "meterLabelLine2": {
+          "text": "DISTRIBUTION"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wqs-oht-02",
+      "type": "WaterQualitySensor",
+      "position": {
+        "x": 840,
+        "y": 60
+      },
+      "attrs": {
+        "pHValue": {
+          "text": "6.3"
+        },
+        "chlorineValue": {
+          "text": "2.2"
+        },
+        "turbidityValue": {
+          "text": "0.8"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flowmeter-oht-02",
+      "type": "FlowMeter",
+      "position": {
+        "x": 943,
+        "y": 60
+      },
+      "attrs": {
+        "flowValue": {
+          "text": "50.0"
+        },
+        "unitLabel": {
+          "text": "m³/h"
+        },
+        "meterLabelLine1": {
+          "text": "Zone-07"
+        },
+        "meterLabelLine2": {
+          "text": "DISTRIBUTION"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wqs-oht-03",
+      "type": "WaterQualitySensor",
+      "position": {
+        "x": 1310,
+        "y": 60
+      },
+      "attrs": {
+        "pHValue": {
+          "text": "6.2"
+        },
+        "chlorineValue": {
+          "text": "2.3"
+        },
+        "turbidityValue": {
+          "text": "0.7"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flowmeter-oht-03",
+      "type": "FlowMeter",
+      "position": {
+        "x": 1415,
+        "y": 60
+      },
+      "attrs": {
+        "flowValue": {
+          "text": "40.0"
+        },
+        "unitLabel": {
+          "text": "m³/h"
+        },
+        "meterLabelLine1": {
+          "text": "Zone-02"
+        },
+        "meterLabelLine2": {
+          "text": "DISTRIBUTION"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "main-pipe-001",
+      "type": "MainPipe",
+      "source": {
+        "id": "conic-tank-001",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "wqs-001",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "main-pipe-002",
+      "type": "MainPipe",
+      "source": {
+        "id": "wqs-001",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "flowmeter-001",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "main-pipe-003",
+      "type": "MainPipe",
+      "source": {
+        "id": "flowmeter-001",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "valve-main-001",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-glsr-01-1",
+      "type": "Pipe",
+      "source": {
+        "id": "glsr-01",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "wqs-glsr-01",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-glsr-01-2",
+      "type": "Pipe",
+      "source": {
+        "id": "wqs-glsr-01",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "flowmeter-glsr-01",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-glsr-01-to-distribution",
+      "type": "Pipe",
+      "source": {
+        "id": "flowmeter-glsr-01",
+        "port": "outlet"
+      },
+      "target": {
+        "x": 605,
+        "y": 613
+      }
+    },
+    {
+      "id": "pipe-glsr-02-1",
+      "type": "Pipe",
+      "source": {
+        "id": "glsr-02",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "wqs-glsr-02",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-glsr-02-2",
+      "type": "Pipe",
+      "source": {
+        "id": "wqs-glsr-02",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "flowmeter-glsr-02",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-glsr-02-to-distribution",
+      "type": "Pipe",
+      "source": {
+        "id": "flowmeter-glsr-02",
+        "port": "outlet"
+      },
+      "target": {
+        "x": 1050,
+        "y": 613
+      }
+    },
+    {
+      "id": "pipe-glsr-03-1",
+      "type": "Pipe",
+      "source": {
+        "id": "glsr-03",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "wqs-glsr-03",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-glsr-03-2",
+      "type": "Pipe",
+      "source": {
+        "id": "wqs-glsr-03",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "flowmeter-glsr-03",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-glsr-03-to-distribution",
+      "type": "Pipe",
+      "source": {
+        "id": "flowmeter-glsr-03",
+        "port": "outlet"
+      },
+      "target": {
+        "x": 1510,
+        "y": 613
+      }
+    },
+    {
+      "id": "pipe-oht-01-1",
+      "type": "Pipe",
+      "source": {
+        "id": "oht-01",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "wqs-oht-01",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-oht-01-2",
+      "type": "Pipe",
+      "source": {
+        "id": "wqs-oht-01",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "flowmeter-oht-01",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-oht-01-to-distribution",
+      "type": "Pipe",
+      "source": {
+        "id": "flowmeter-oht-01",
+        "port": "outlet"
+      },
+      "target": {
+        "x": 600,
+        "y": 85
+      }
+    },
+    {
+      "id": "pipe-oht-02-1",
+      "type": "Pipe",
+      "source": {
+        "id": "oht-02",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "wqs-oht-02",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-oht-02-2",
+      "type": "Pipe",
+      "source": {
+        "id": "wqs-oht-02",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "flowmeter-oht-02",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-oht-02-to-distribution",
+      "type": "Pipe",
+      "source": {
+        "id": "flowmeter-oht-02",
+        "port": "outlet"
+      },
+      "target": {
+        "x": 1030,
+        "y": 85
+      }
+    },
+    {
+      "id": "pipe-oht-03-1",
+      "type": "Pipe",
+      "source": {
+        "id": "oht-03",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "wqs-oht-03",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-oht-03-2",
+      "type": "Pipe",
+      "source": {
+        "id": "wqs-oht-03",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "flowmeter-oht-03",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-oht-03-to-distribution",
+      "type": "Pipe",
+      "source": {
+        "id": "flowmeter-oht-03",
+        "port": "outlet"
+      },
+      "target": {
+        "x": 1500,
+        "y": 85
+      }
+    },
+    {
+      "id": "valve-main-001",
+      "type": "HandValve",
+      "position": {
+        "x": 115,
+        "y": 306
+      },
+      "angle": 0,
+      "attrs": {
+        "label": {
+          "text": "V-MAIN"
+        }
+      },
+      "z": 2
+    },
+    {
+      "id": "valve-oht-01",
+      "type": "HandValve",
+      "position": {
+        "x": 205,
+        "y": 225
+      },
+      "angle": 270,
+      "attrs": {
+        "label": {
+          "text": "V-OHT1"
+        }
+      },
+      "z": 2
+    },
+    {
+      "id": "valve-glsr-01",
+      "type": "HandValve",
+      "position": {
+        "x": 213,
+        "y": 395
+      },
+      "angle": 270,
+      "attrs": {
+        "label": {
+          "text": "V-GLSR1"
+        }
+      },
+      "z": 2
+    },
+    {
+      "id": "valve-oht-02",
+      "type": "HandValve",
+      "position": {
+        "x": 638,
+        "y": 225
+      },
+      "angle": 270,
+      "attrs": {
+        "label": {
+          "text": "V-OHT2"
+        }
+      },
+      "z": 2
+    },
+    {
+      "id": "valve-glsr-02",
+      "type": "HandValve",
+      "position": {
+        "x": 653,
+        "y": 395
+      },
+      "angle": 270,
+      "attrs": {
+        "label": {
+          "text": "V-GLSR2"
+        }
+      },
+      "z": 2
+    },
+    {
+      "id": "valve-oht-03",
+      "type": "HandValve",
+      "position": {
+        "x": 1105,
+        "y": 225
+      },
+      "angle": 270,
+      "attrs": {
+        "label": {
+          "text": "V-OHT3"
+        }
+      },
+      "z": 2
+    },
+    {
+      "id": "valve-glsr-03",
+      "type": "HandValve",
+      "position": {
+        "x": 1115,
+        "y": 395
+      },
+      "angle": 270,
+      "attrs": {
+        "label": {
+          "text": "V-GLSR3"
+        }
+      },
+      "z": 2
+    },
+    {
+      "id": "pipe-valve-main-to-header",
+      "type": "MainPipe",
+      "source": {
+        "id": "valve-main-001",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "header-pipe-main",
+        "port": "branch1"
+      }
+    },
+    {
+      "id": "pipe-header-to-valve-oht-01",
+      "type": "Pipe",
+      "source": {
+        "id": "header-pipe-main",
+        "port": "branch2"
+      },
+      "target": {
+        "id": "valve-oht-01",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-valve-oht-01-to-tank",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-oht-01",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "oht-01",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-header-to-valve-glsr-01",
+      "type": "Pipe",
+      "source": {
+        "id": "header-pipe-main",
+        "port": "branch3"
+      },
+      "target": {
+        "id": "valve-glsr-01",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-valve-glsr-01-to-tank",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-glsr-01",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "glsr-01",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-header-to-valve-oht-02",
+      "type": "Pipe",
+      "source": {
+        "id": "header-pipe-main",
+        "port": "branch4"
+      },
+      "target": {
+        "id": "valve-oht-02",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-valve-oht-02-to-tank",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-oht-02",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "oht-02",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-header-to-valve-glsr-02",
+      "type": "Pipe",
+      "source": {
+        "id": "header-pipe-main",
+        "port": "branch5"
+      },
+      "target": {
+        "id": "valve-glsr-02",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-valve-glsr-02-to-tank",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-glsr-02",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "glsr-02",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-header-to-valve-oht-03",
+      "type": "Pipe",
+      "source": {
+        "id": "header-pipe-main",
+        "port": "branch6"
+      },
+      "target": {
+        "id": "valve-oht-03",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-valve-oht-03-to-tank",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-oht-03",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "oht-03",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-header-to-valve-glsr-03",
+      "type": "Pipe",
+      "source": {
+        "id": "header-pipe-main",
+        "port": "branch7"
+      },
+      "target": {
+        "id": "valve-glsr-03",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "pipe-valve-glsr-03-to-tank",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-glsr-03",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "glsr-03",
+        "port": "inlet"
+      }
+    },
+    {
+      "id": "oht-new",
+      "type": "LargeOHTank",
+      "position": {
+        "x": -20,
+        "y": 100
+      },
+      "attrs": {
+        "tankLabel": {
+          "text": "New OHT - Zone 0"
+        },
+        "tankId": {
+          "text": "OHT-NEW"
+        },
+        "levelIndicator": {
+          "text": "50%"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "wqs-new",
+      "type": "WaterQualitySensor",
+      "position": {
+        "x": 300,
+        "y": 174
+      },
+      "attrs": {
+        "pHValue": {
+          "text": "7.0"
+        },
+        "chlorineValue": {
+          "text": "1.5"
+        },
+        "turbidityValue": {
+          "text": "0.5"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "fm-new",
+      "type": "FlowMeter",
+      "position": {
+        "x": 400,
+        "y": 174
+      },
+      "attrs": {
+        "flowValue": {
+          "text": "60.0"
+        },
+        "unitLabel": {
+          "text": "m³/h"
+        },
+        "meterLabelLine1": {
+          "text": "Main Flow"
+        },
+        "meterLabelLine2": {
+          "text": "NEW"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valve-main-new",
+      "type": "HandValve",
+      "position": {
+        "x": 500,
+        "y": 174
+      },
+      "angle": 0,
+      "attrs": {
+        "label": {
+          "text": "V-MAIN"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "header-vertical",
+      "type": "VerticalHeaderPipe",
+      "position": {
+        "x": 600,
+        "y": 100
+      },
+      "attrs": {
+        "pipeBody": {
+          "fill": "#7eabcb"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in",
+            "args": {
+              "x": 10,
+              "y": 100
+            }
+          },
+          {
+            "id": "branch1",
+            "group": "branch",
+            "args": {
+              "x": 10,
+              "y": -250
+            }
+          },
+          {
+            "id": "branch2",
+            "group": "branch",
+            "args": {
+              "x": 10,
+              "y": -110
+            }
+          },
+          {
+            "id": "branch3",
+            "group": "branch",
+            "args": {
+              "x": 10,
+              "y": 40
+            }
+          },
+          {
+            "id": "branch4",
+            "group": "branch",
+            "args": {
+              "x": 10,
+              "y": 190
+            }
+          },
+          {
+            "id": "branch5",
+            "group": "branch",
+            "args": {
+              "x": 10,
+              "y": 320
+            }
+          },
+          {
+            "id": "branch6",
+            "group": "branch",
+            "args": {
+              "x": 10,
+              "y": 450
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "pipe-oht-to-wqs",
+      "type": "Pipe",
+      "source": {
+        "id": "oht-new",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "wqs-new",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-wqs-to-fm",
+      "type": "Pipe",
+      "source": {
+        "id": "wqs-new",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "fm-new",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-fm-to-valve",
+      "type": "Pipe",
+      "source": {
+        "id": "fm-new",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "valve-main-new",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-valve-to-header",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-main-new",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "header-vertical",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pump-zone1",
+      "type": "Pump",
+      "position": {
+        "x": 680,
+        "y": -170
+      },
+      "size": {
+        "width": 40,
+        "height": 40
+      },
+      "attrs": {
+        "label": {
+          "text": "P1"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "left",
+            "group": "left"
+          },
+          {
+            "id": "right",
+            "group": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valve-zone1",
+      "type": "HandValve",
+      "position": {
+        "x": 780,
+        "y": -175
+      },
+      "size": {
+        "width": 50,
+        "height": 50
+      },
+      "attrs": {
+        "label": {
+          "text": "V1"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zone-1",
+      "type": "ZoneLabel",
+      "position": {
+        "x": 900,
+        "y": -160
+      },
+      "size": {
+        "width": 60,
+        "height": 20
+      },
+      "attrs": {
+        "zoneText": {
+          "fill": "#A9A9A9",
+          "text": "       Street 1"
+        }
+      }
+    },
+    {
+      "id": "pipe-header-to-pump1",
+      "type": "Pipe",
+      "source": {
+        "id": "header-vertical",
+        "port": "branch1"
+      },
+      "target": {
+        "id": "pump-zone1",
+        "port": "left"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-pump1-to-valve1",
+      "type": "Pipe",
+      "source": {
+        "id": "pump-zone1",
+        "port": "right"
+      },
+      "target": {
+        "id": "valve-zone1",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-valve1-to-zone1",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-zone1",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "zone-1"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pump-zone2",
+      "type": "Pump",
+      "position": {
+        "x": 680,
+        "y": -30
+      },
+      "size": {
+        "width": 40,
+        "height": 40
+      },
+      "attrs": {
+        "label": {
+          "text": "P2"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "left",
+            "group": "left"
+          },
+          {
+            "id": "right",
+            "group": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valve-zone2",
+      "type": "HandValve",
+      "position": {
+        "x": 780,
+        "y": -35
+      },
+      "size": {
+        "width": 50,
+        "height": 50
+      },
+      "attrs": {
+        "label": {
+          "text": "V2"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zone-2",
+      "type": "ZoneLabel",
+      "position": {
+        "x": 900,
+        "y": -20
+      },
+      "size": {
+        "width": 60,
+        "height": 20
+      },
+      "attrs": {
+        "zoneText": {
+          "fill": "#A9A9A9",
+          "text": "       Street 2"
+        }
+      }
+    },
+    {
+      "id": "pipe-header-to-pump2",
+      "type": "Pipe",
+      "source": {
+        "id": "header-vertical",
+        "port": "branch2"
+      },
+      "target": {
+        "id": "pump-zone2",
+        "port": "left"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-pump2-to-valve2",
+      "type": "Pipe",
+      "source": {
+        "id": "pump-zone2",
+        "port": "right"
+      },
+      "target": {
+        "id": "valve-zone2",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-valve2-to-zone2",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-zone2",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "zone-2"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pump-zone3",
+      "type": "Pump",
+      "position": {
+        "x": 680,
+        "y": 120
+      },
+      "size": {
+        "width": 40,
+        "height": 40
+      },
+      "attrs": {
+        "label": {
+          "text": "P3"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "left",
+            "group": "left"
+          },
+          {
+            "id": "right",
+            "group": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valve-zone3",
+      "type": "HandValve",
+      "position": {
+        "x": 780,
+        "y": 115
+      },
+      "size": {
+        "width": 50,
+        "height": 50
+      },
+      "attrs": {
+        "label": {
+          "text": "V3"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zone-3",
+      "type": "ZoneLabel",
+      "position": {
+        "x": 900,
+        "y": 130
+      },
+      "size": {
+        "width": 60,
+        "height": 20
+      },
+      "attrs": {
+        "zoneText": {
+          "fill": "#A9A9A9",
+          "text": "       Street 3"
+        }
+      }
+    },
+    {
+      "id": "pipe-header-to-pump3",
+      "type": "Pipe",
+      "source": {
+        "id": "header-vertical",
+        "port": "branch3"
+      },
+      "target": {
+        "id": "pump-zone3",
+        "port": "left"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-pump3-to-valve3",
+      "type": "Pipe",
+      "source": {
+        "id": "pump-zone3",
+        "port": "right"
+      },
+      "target": {
+        "id": "valve-zone3",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-valve3-to-zone3",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-zone3",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "zone-3"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pump-zone4",
+      "type": "Pump",
+      "position": {
+        "x": 680,
+        "y": 270
+      },
+      "size": {
+        "width": 40,
+        "height": 40
+      },
+      "attrs": {
+        "label": {
+          "text": "P4"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "left",
+            "group": "left"
+          },
+          {
+            "id": "right",
+            "group": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valve-zone4",
+      "type": "HandValve",
+      "position": {
+        "x": 780,
+        "y": 265
+      },
+      "size": {
+        "width": 50,
+        "height": 50
+      },
+      "attrs": {
+        "label": {
+          "text": "V4"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zone-4",
+      "type": "ZoneLabel",
+      "position": {
+        "x": 900,
+        "y": 280
+      },
+      "size": {
+        "width": 60,
+        "height": 20
+      },
+      "attrs": {
+        "zoneText": {
+          "fill": "#A9A9A9",
+          "text": "       Street 4"
+        }
+      }
+    },
+    {
+      "id": "pipe-header-to-pump4",
+      "type": "Pipe",
+      "source": {
+        "id": "header-vertical",
+        "port": "branch4"
+      },
+      "target": {
+        "id": "pump-zone4",
+        "port": "left"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-pump4-to-valve4",
+      "type": "Pipe",
+      "source": {
+        "id": "pump-zone4",
+        "port": "right"
+      },
+      "target": {
+        "id": "valve-zone4",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-valve4-to-zone4",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-zone4",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "zone-4"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pump-zone5",
+      "type": "Pump",
+      "position": {
+        "x": 680,
+        "y": 400
+      },
+      "size": {
+        "width": 40,
+        "height": 40
+      },
+      "attrs": {
+        "label": {
+          "text": "P5"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "left",
+            "group": "left"
+          },
+          {
+            "id": "right",
+            "group": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valve-zone5",
+      "type": "HandValve",
+      "position": {
+        "x": 780,
+        "y": 395
+      },
+      "size": {
+        "width": 50,
+        "height": 50
+      },
+      "attrs": {
+        "label": {
+          "text": "V5"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zone-5",
+      "type": "ZoneLabel",
+      "position": {
+        "x": 900,
+        "y": 410
+      },
+      "size": {
+        "width": 60,
+        "height": 20
+      },
+      "attrs": {
+        "zoneText": {
+          "fill": "#A9A9A9",
+          "text": "       Street 5"
+        }
+      }
+    },
+    {
+      "id": "pipe-header-to-pump5",
+      "type": "Pipe",
+      "source": {
+        "id": "header-vertical",
+        "port": "branch5"
+      },
+      "target": {
+        "id": "pump-zone5",
+        "port": "left"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-pump5-to-valve5",
+      "type": "Pipe",
+      "source": {
+        "id": "pump-zone5",
+        "port": "right"
+      },
+      "target": {
+        "id": "valve-zone5",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-valve5-to-zone5",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-zone5",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "zone-5"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pump-zone6",
+      "type": "Pump",
+      "position": {
+        "x": 680,
+        "y": 530
+      },
+      "size": {
+        "width": 40,
+        "height": 40
+      },
+      "attrs": {
+        "label": {
+          "text": "P6"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "left",
+            "group": "left"
+          },
+          {
+            "id": "right",
+            "group": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valve-zone6",
+      "type": "HandValve",
+      "position": {
+        "x": 780,
+        "y": 525
+      },
+      "size": {
+        "width": 50,
+        "height": 50
+      },
+      "attrs": {
+        "label": {
+          "text": "V6"
+        }
+      },
+      "ports": {
+        "items": [
+          {
+            "id": "inlet",
+            "group": "in"
+          },
+          {
+            "id": "outlet",
+            "group": "out"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zone-6",
+      "type": "ZoneLabel",
+      "position": {
+        "x": 900,
+        "y": 540
+      },
+      "size": {
+        "width": 60,
+        "height": 20
+      },
+      "attrs": {
+        "zoneText": {
+          "fill": "#A9A9A9",
+          "text": "       Street 6"
+        }
+      }
+    },
+    {
+      "id": "pipe-header-to-pump6",
+      "type": "Pipe",
+      "source": {
+        "id": "header-vertical",
+        "port": "branch6"
+      },
+      "target": {
+        "id": "pump-zone6",
+        "port": "left"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-pump6-to-valve6",
+      "type": "Pipe",
+      "source": {
+        "id": "pump-zone6",
+        "port": "right"
+      },
+      "target": {
+        "id": "valve-zone6",
+        "port": "inlet"
+      },
+      "attrs": {}
+    },
+    {
+      "id": "pipe-valve6-to-zone6",
+      "type": "Pipe",
+      "source": {
+        "id": "valve-zone6",
+        "port": "outlet"
+      },
+      "target": {
+        "id": "zone-6"
+      },
+      "attrs": {}
+    }
+  ]
+}
