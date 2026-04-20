@@ -11,9 +11,8 @@ import ControlPanelPage, {
   CONIC_INITIAL_LEVEL,
 } from './ControlPanel';
 
-// ─── API IMPORTS ────────────────────────────────────────────────────────────
 import {
-  fetchDashboard,          // single-call preferred
+  fetchDashboard,
   updateTankLevel,
   updateFlowRate,
   toggleValve,
@@ -22,13 +21,37 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 // CONSTANTS
 // ─────────────────────────────────────────────────────────────────────────────
-
-// How often (ms) the frontend re-fetches all data from the backend.
-// Lowering this makes the UI more responsive to direct DB edits;
-// raising it reduces API load. 10 seconds is a good default.
-const POLL_INTERVAL_MS = 10_000;
-
+const POLL_INTERVAL_MS = 5_000;
 const FONT = "'Courier New', monospace";
+
+// ── Simulation constants ─────────────────────────────────────────────────────
+// Maps each tank to the flowmeter that measures water leaving it (outlet).
+const TANK_TO_OUTLET_FM = {
+  'oht-01':  'flowmeter-oht-01',
+  'oht-02':  'flowmeter-oht-02',
+  'oht-03':  'flowmeter-oht-03',
+  'glsr-01': 'flowmeter-glsr-01',
+  'glsr-02': 'flowmeter-glsr-02',
+  'glsr-03': 'flowmeter-glsr-03',
+};
+
+// Maps each tank to the valve that controls inlet flow into it.
+const TANK_TO_INLET_VALVE = {
+  'oht-01':  'valve-oht-01',
+  'oht-02':  'valve-oht-02',
+  'oht-03':  'valve-oht-03',
+  'glsr-01': 'valve-glsr-01',
+  'glsr-02': 'valve-glsr-02',
+  'glsr-03': 'valve-glsr-03',
+};
+
+// How many % a tank fills per (m³/h of main flow) per second,
+// shared equally among all active (non-full, valve-open) tanks.
+const FILL_COEFF  = 0.05;  // ~2 min to fill from 0 at 100 m³/h with 6 tanks
+// How many % a tank drains per (m³/h of outlet flow) per second.
+const DRAIN_COEFF = 0.03;
+// How many % the sump drains per (m³/h of main flow) per second.
+const SUMP_DRAIN_COEFF = 0.01;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GLOBAL CSS
@@ -74,6 +97,10 @@ const GLOBAL_CSS = `
   @keyframes glow {
     0%,100% { box-shadow: 0 0 18px #0ea5e944; }
     50%      { box-shadow: 0 0 32px #0ea5e977; }
+  }
+  @keyframes scadaSpinner {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
   .hero-drop  { animation: fadeUp 0.7s ease both; animation-delay: 0.1s; }
@@ -149,7 +176,6 @@ const Icon = {
   ),
 };
 
-// ─── Nav tabs ─────────────────────────────────────────────────────────────────
 const TABS = [
   { id: 'digital-twin', label: 'Digital Twin',        I: Icon.DigitalTwin },
   { id: 'controls',     label: 'Controls',             I: Icon.Controls    },
@@ -157,6 +183,30 @@ const TABS = [
   { id: 'performance',  label: 'Performance',          I: Icon.Performance },
   { id: 'maintenance',  label: 'Maintenance',          I: Icon.Maintenance },
 ];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LOADING SCREEN  (shown until the first DB fetch resolves)
+// ─────────────────────────────────────────────────────────────────────────────
+function ScadaLoadingScreen() {
+  return (
+    <div style={{
+      flex: 1, display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      background: '#f8fafc', gap: 18,
+    }}>
+      <div style={{
+        width: 44, height: 44,
+        border: '4px solid #e2e8f0',
+        borderTop: '4px solid #38b2f8',
+        borderRadius: '50%',
+        animation: 'scadaSpinner 0.9s linear infinite',
+      }} />
+      <div style={{ fontFamily: FONT, fontSize: 11, color: '#64748b', letterSpacing: '.08em' }}>
+        CONNECTING TO SCADA…
+      </div>
+    </div>
+  );
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SITE HEADER
@@ -192,7 +242,6 @@ function SiteHeader({ activeTab, onNav, scrolled }) {
           Login / Register
         </button>
       </div>
-
       <div style={{ borderTop:'1px solid #cbd5e1', padding:'0 40px', display:'flex', gap:0 }}>
         {TABS.map(tab => {
           const active = activeTab === tab.id;
@@ -237,7 +286,7 @@ function SiteFooter() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// FEATURE CARDS
+// FEATURE STRIP
 // ─────────────────────────────────────────────────────────────────────────────
 const FEAT_STYLE = `
   @keyframes featUp {
@@ -287,7 +336,7 @@ function FeatureStrip({ onNav }) {
   );
 }
 
-// ─── Reusable live header bar (used on Digital Twin and Controls tabs) ────────
+// ─── Shared live header (Digital Twin + Controls tabs) ────────────────────────
 function LiveHeader({ activeTabId, onNav, time }) {
   return (
     <div style={{ flexShrink:0, background:'#f8fafc', borderBottom:'1px solid #cbd5e1' }}>
@@ -349,68 +398,231 @@ export default function Home() {
   const [scrolled,  setScrolled]  = useState(false);
   const [time,      setTime]      = useState(() => new Date().toLocaleTimeString('en-GB'));
 
-  // ── Shared SCADA state (initialised with hardcoded defaults) ────────────────
-  const [scadaLevels,      setScadaLevels]      = useState(() => ({ ...INITIAL_LEVELS }));
-  const [scadaFlows,       setScadaFlows]       = useState(() => ({ ...INITIAL_FLOWS  }));
-  const [scadaConicLevel,  setScadaConicLevel]  = useState(CONIC_INITIAL_LEVEL);
-  const [scadaValveStates, setScadaValveStates] = useState(() => ({ ...INITIAL_VALVE_STATES }));
+  // ── Shared SCADA state ───────────────────────────────────────────────────────
+  // Start as null so we never show stale hardcoded values before the first DB fetch.
+  const [scadaLevels,      setScadaLevels]      = useState(null);
+  const [scadaFlows,       setScadaFlows]       = useState(null);
+  const [scadaConicLevel,  setScadaConicLevel]  = useState(null);
+  const [scadaValveStates, setScadaValveStates] = useState(null);
 
-  // Track whether a user-driven write is in flight so the poll doesn't
-  // overwrite an optimistic UI update with a stale DB value.
-  const writePendingRef = useRef(false);
+  // True once the first DB fetch (or graceful fallback) has completed.
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  // Inside Home component
-const POLL_INTERVAL_MS = 5000; // 5 seconds
+  // Prevents the polling loop from overwriting optimistic UI updates AND
+  // prevents the polling loop from overwriting simulation-driven level changes
+  // while flows are active.
+  const writePendingRef      = useRef(false);
+  const simulationActiveRef  = useRef(false); // true while any flow > 0
+  const dbSyncTickRef        = useRef(0);     // counts simulation ticks for periodic DB flush
 
-const loadData = useCallback(async () => {
-  if (writePendingRef.current) return; // skip if user is actively changing
-  try {
-    const dash = await fetchDashboard();
-    
-    // Update tanks (including conic-sump)
-    const newLevels = { ...INITIAL_LEVELS };
-    (dash.tanks || []).forEach(tank => {
-      if (tank.id === 'conic-sump') {
-        setScadaConicLevel(tank.level);
-      } else if (tank.id in newLevels) {
-        newLevels[tank.id] = tank.level;
+  // ── Refs to always-current state (avoids stale closures in setInterval) ─────
+  const latestRef = useRef({
+    levels:      INITIAL_LEVELS,
+    flows:       INITIAL_FLOWS,
+    valveStates: INITIAL_VALVE_STATES,
+    conicLevel:  CONIC_INITIAL_LEVEL,
+  });
+
+  // Keep latestRef in sync
+  useEffect(() => {
+    if (scadaLevels)      latestRef.current.levels      = scadaLevels;
+  }, [scadaLevels]);
+  useEffect(() => {
+    if (scadaFlows)       latestRef.current.flows       = scadaFlows;
+  }, [scadaFlows]);
+  useEffect(() => {
+    if (scadaValveStates) latestRef.current.valveStates = scadaValveStates;
+  }, [scadaValveStates]);
+  useEffect(() => {
+    if (scadaConicLevel !== null) latestRef.current.conicLevel = scadaConicLevel;
+  }, [scadaConicLevel]);
+
+  // ── DATA LOADER (initial load + polling) ────────────────────────────────────
+  const loadData = useCallback(async () => {
+    if (writePendingRef.current) return;
+    try {
+      const dash = await fetchDashboard();
+
+      // ── Levels: only accept DB values when no simulation is running ──────────
+      if (!simulationActiveRef.current) {
+        const newLevels = { ...INITIAL_LEVELS };
+        const newConicLevel = CONIC_INITIAL_LEVEL;
+        let conicFromDB = newConicLevel;
+
+        (dash.tanks || []).forEach(tank => {
+          if (tank.id === 'conic-sump') {
+            conicFromDB = tank.level;
+          } else if (tank.id in newLevels) {
+            newLevels[tank.id] = tank.level;
+          }
+        });
+
+        setScadaLevels(newLevels);
+        setScadaConicLevel(conicFromDB);
       }
-    });
-    setScadaLevels(newLevels);
 
-    // Update flow meters
-    const newFlows = { ...INITIAL_FLOWS };
-    (dash.flowmeters || []).forEach(fm => {
-      if (fm.id in newFlows) newFlows[fm.id] = fm.flow;
-    });
-    setScadaFlows(newFlows);
-    
+      // ── Flows: always accept from DB ─────────────────────────────────────────
+      const newFlows = { ...INITIAL_FLOWS };
+      (dash.flowmeters || []).forEach(fm => {
+        if (fm.id in newFlows) newFlows[fm.id] = fm.flow;
+      });
+      setScadaFlows(newFlows);
 
-    
-    // Update valves
-    const newValves = { ...INITIAL_VALVE_STATES };
-    (dash.valves || []).forEach(valve => {
-      if (valve.id in newValves) newValves[valve.id] = valve.isOpen;
-    });
-    setScadaValveStates(newValves);
+      // ── Valve states: always accept from DB ──────────────────────────────────
+      const newValves = { ...INITIAL_VALVE_STATES };
+      (dash.valves || []).forEach(valve => {
+        if (valve.id in newValves) newValves[valve.id] = valve.isOpen;
+      });
+      setScadaValveStates(newValves);
 
-  } catch (err) {
-    console.warn('SCADA backend unavailable, using defaults');
-  }
-}, []);
+    } catch (err) {
+      // Backend unavailable — fall back to hardcoded defaults on first load.
+      console.warn('SCADA backend unavailable, using defaults');
+      if (!dataLoaded) {
+        setScadaLevels({ ...INITIAL_LEVELS });
+        setScadaFlows({ ...INITIAL_FLOWS });
+        setScadaConicLevel(CONIC_INITIAL_LEVEL);
+        setScadaValveStates({ ...INITIAL_VALVE_STATES });
+      }
+    } finally {
+      // Mark data as ready after the very first attempt (success or failure).
+      setDataLoaded(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-useEffect(() => {
-  loadData();
-  const interval = setInterval(loadData, POLL_INTERVAL_MS);
-  return () => clearInterval(interval);
-}, [loadData]);
+  useEffect(() => {
+    loadData();
+    const interval = setInterval(loadData, POLL_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [loadData]);
+
+  // ── FRONTEND LEVEL SIMULATION ────────────────────────────────────────────────
+  // Runs every second. When the main inlet valve is open and flow > 0,
+  // branch pipes fill tanks (levels rise). When outlet flowmeters are active,
+  // the corresponding tanks drain (levels fall).
+  // The simulation only changes local React state — it does NOT write to the DB.
+  // The DB poll will re-sync baseline values whenever all flows stop.
+  useEffect(() => {
+    const simInterval = setInterval(() => {
+      const { flows, valveStates, levels, conicLevel } = latestRef.current;
+
+      const mainFlow   = flows['flowmeter-001'] ?? 0;
+      const masterOpen = valveStates['valve-main-001'] ?? true;
+
+      // Check if any flow is active at all.
+      const anyOutletFlow = Object.entries(TANK_TO_OUTLET_FM).some(
+        ([, fmId]) => (flows[fmId] ?? 0) > 0
+      );
+      const anyFlow = (mainFlow > 0 && masterOpen) || anyOutletFlow;
+
+      // ── Detect simulation stopping → flush final levels to DB ──────────────
+      // FIX: The simulation only ever wrote levels into React state, never to the
+      // DB. So when the main slider was turned off, simulationActiveRef became
+      // false, the next 5-second DB poll read the stale DB values, and the UI
+      // snapped back to the original static data. Now we flush the latest
+      // simulation-computed levels to the DB the moment flow stops, and also
+      // sync every 5 ticks while flowing so progress is never lost.
+      const wasActive = simulationActiveRef.current;
+      simulationActiveRef.current = anyFlow;
+
+      if (!anyFlow) {
+        if (wasActive && !writePendingRef.current) {
+          // Simulation just stopped — persist the last known levels immediately
+          // so the upcoming DB poll reads current values, not stale ones.
+          writePendingRef.current = true;
+          const { levels: finalLevels, conicLevel: finalConic } = latestRef.current;
+          Promise.all([
+            ...Object.entries(finalLevels).map(([id, lvl]) =>
+              updateTankLevel(id, lvl).catch(() => {})
+            ),
+            updateTankLevel('conic-sump', finalConic).catch(() => {}),
+          ]).finally(() => { writePendingRef.current = false; });
+        }
+        return; // nothing to simulate — DB poll handles idle state
+      }
+
+      // Count tanks that are actively receiving inlet water right now.
+      const activeTankIds = Object.keys(TANK_TO_OUTLET_FM).filter(tankId => {
+        const valveId   = TANK_TO_INLET_VALVE[tankId];
+        const valveOpen = valveStates[valveId] ?? true;
+        const level     = levels[tankId] ?? 0;
+        return masterOpen && mainFlow > 0 && valveOpen && level < 100 && conicLevel > 0;
+      });
+
+      const fillPerTank = activeTankIds.length > 0
+        ? (mainFlow * FILL_COEFF) / activeTankIds.length
+        : 0;
+
+      // ── Update tank levels ──────────────────────────────────────────────────
+      // Capture the newly-computed levels synchronously inside the updater so
+      // we can write them to the DB without a separate state-read round-trip.
+      let computedLevels = null;
+      setScadaLevels(prev => {
+        if (!prev) return prev;
+        const next = { ...prev };
+        Object.keys(TANK_TO_OUTLET_FM).forEach(tankId => {
+          const valveId    = TANK_TO_INLET_VALVE[tankId];
+          const valveOpen  = valveStates[valveId] ?? true;
+          const outletFmId = TANK_TO_OUTLET_FM[tankId];
+          const outletFlow = flows[outletFmId] ?? 0;
+
+          // How much this tank fills this second (inlet).
+          const fillRate = (
+            masterOpen &&
+            mainFlow > 0 &&
+            valveOpen &&
+            (prev[tankId] ?? 0) < 100 &&
+            conicLevel > 0
+          ) ? fillPerTank : 0;
+
+          // How much this tank drains this second (outlet).
+          const drainRate = outletFlow > 0 && (prev[tankId] ?? 0) > 0
+            ? outletFlow * DRAIN_COEFF
+            : 0;
+
+          next[tankId] = Math.max(0, Math.min(100,
+            (prev[tankId] ?? 0) + fillRate - drainRate
+          ));
+        });
+        computedLevels = next; // captured synchronously — updater runs immediately
+        return next;
+      });
+
+      // ── Drain the sump (conic) when inlet flow is active ───────────────────
+      let computedConic = null;
+      if (mainFlow > 0 && masterOpen && conicLevel > 0) {
+        setScadaConicLevel(prev => {
+          computedConic = Math.max(0, (prev ?? CONIC_INITIAL_LEVEL) - mainFlow * SUMP_DRAIN_COEFF);
+          return computedConic;
+        });
+      }
+
+      // ── Periodic DB sync while flowing (every 5 simulation ticks ≈ 5 s) ────
+      // Keeps the DB from drifting too far behind so a page refresh or backend
+      // restart sees reasonably current values even mid-simulation.
+      dbSyncTickRef.current = (dbSyncTickRef.current + 1) % 5;
+      if (dbSyncTickRef.current === 0 && computedLevels && !writePendingRef.current) {
+        writePendingRef.current = true;
+        Promise.all([
+          ...Object.entries(computedLevels).map(([id, lvl]) =>
+            updateTankLevel(id, lvl).catch(() => {})
+          ),
+          ...(computedConic !== null
+            ? [updateTankLevel('conic-sump', computedConic).catch(() => {})]
+            : []
+          ),
+        ]).finally(() => { writePendingRef.current = false; });
+      }
+    }, 1000);
+
+    return () => clearInterval(simInterval);
+  }, []); // single setup — reads live values from latestRef
 
   // ── CHANGE HANDLERS ──────────────────────────────────────────────────────────
-  // Each handler: (1) updates the UI optimistically, (2) writes to the DB,
-  // (3) clears the write-pending flag so polling resumes.
 
   const handleFlowChange = useCallback(async (fmId, newValue) => {
-    setScadaFlows(prev => ({ ...prev, [fmId]: newValue }));
+    setScadaFlows(prev => prev ? { ...prev, [fmId]: newValue } : { ...INITIAL_FLOWS, [fmId]: newValue });
     writePendingRef.current = true;
     try {
       await updateFlowRate(fmId, newValue);
@@ -428,7 +640,7 @@ useEffect(() => {
       try { await updateTankLevel('conic-sump', newValue); }
       catch (err) { console.error('updateTankLevel(conic-sump) failed:', err.message); }
     } else {
-      setScadaLevels(prev => ({ ...prev, [id]: newValue }));
+      setScadaLevels(prev => prev ? { ...prev, [id]: newValue } : { ...INITIAL_LEVELS, [id]: newValue });
       try { await updateTankLevel(id, newValue); }
       catch (err) { console.error(`updateTankLevel(${id}) failed:`, err.message); }
     }
@@ -436,38 +648,34 @@ useEffect(() => {
   }, []);
 
   const handleValveToggle = useCallback(async (valveId) => {
-    const currentState = scadaValveStates[valveId];
+    const currentState = latestRef.current.valveStates[valveId];
     const newState = !currentState;
-    setScadaValveStates(prev => ({ ...prev, [valveId]: newState }));
+    setScadaValveStates(prev => prev ? { ...prev, [valveId]: newState } : { ...INITIAL_VALVE_STATES, [valveId]: newState });
     writePendingRef.current = true;
     try {
       await toggleValve(valveId, newState);
     } catch (err) {
       console.error(`toggleValve(${valveId}) failed:`, err.message);
-      // Revert optimistic update on failure
-      setScadaValveStates(prev => ({ ...prev, [valveId]: currentState }));
+      setScadaValveStates(prev => prev ? { ...prev, [valveId]: currentState } : null);
     } finally {
       writePendingRef.current = false;
     }
-  }, [scadaValveStates]);
+  }, []);
 
   const handleReset = useCallback(async () => {
-    // Reset UI immediately
     setScadaLevels({ ...INITIAL_LEVELS });
     setScadaFlows({ ...INITIAL_FLOWS });
     setScadaConicLevel(CONIC_INITIAL_LEVEL);
     setScadaValveStates({ ...INITIAL_VALVE_STATES });
-
-    // Persist all resets to DB concurrently
+    simulationActiveRef.current = false;
     writePendingRef.current = true;
     try {
       await Promise.all([
-        ...Object.entries(INITIAL_LEVELS).map(([id, lvl])    => updateTankLevel(id, lvl)),
-        ...Object.entries(INITIAL_FLOWS).map(([id, flow])    => updateFlowRate(id, flow)),
+        ...Object.entries(INITIAL_LEVELS).map(([id, lvl])       => updateTankLevel(id, lvl)),
+        ...Object.entries(INITIAL_FLOWS).map(([id, flow])        => updateFlowRate(id, flow)),
         ...Object.entries(INITIAL_VALVE_STATES).map(([id, open]) => toggleValve(id, open)),
         updateTankLevel('conic-sump', CONIC_INITIAL_LEVEL),
       ]);
-      console.log('✓ All assets reset in DB');
     } catch (err) {
       console.error('Reset failed (UI is still reset):', err.message);
     } finally {
@@ -477,12 +685,10 @@ useEffect(() => {
 
   // ── LIFECYCLE ────────────────────────────────────────────────────────────────
   useEffect(() => { injectGlobalCSS(); }, []);
-
   useEffect(() => {
     const iv = setInterval(() => setTime(new Date().toLocaleTimeString('en-GB')), 1000);
     return () => clearInterval(iv);
   }, []);
-
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', handler, { passive: true });
@@ -495,12 +701,19 @@ useEffect(() => {
     setActiveTab(tab);
   };
 
-  // Props passed to both the Digital Twin and Controls pages
+  // Resolved state: fall back to INITIAL values only as a last resort so
+  // JsonDisplay / ControlPanel never receive null props.
+  const resolvedLevels      = scadaLevels      ?? INITIAL_LEVELS;
+  const resolvedFlows       = scadaFlows       ?? INITIAL_FLOWS;
+  const resolvedConicLevel  = scadaConicLevel  ?? CONIC_INITIAL_LEVEL;
+  const resolvedValveStates = scadaValveStates ?? INITIAL_VALVE_STATES;
+
+  // Props shared between Digital Twin and Controls pages.
   const scadaProps = {
-    externalLevels:      scadaLevels,
-    externalFlows:       scadaFlows,
-    externalConicLevel:  scadaConicLevel,
-    externalValveStates: scadaValveStates,
+    externalLevels:      resolvedLevels,
+    externalFlows:       resolvedFlows,
+    externalConicLevel:  resolvedConicLevel,
+    externalValveStates: resolvedValveStates,
     onFlowChange:        handleFlowChange,
     onLevelChange:       handleLevelChange,
     onValveToggle:       handleValveToggle,
@@ -517,9 +730,16 @@ useEffect(() => {
     return (
       <div style={{ width:'100vw', height:'100vh', display:'flex', flexDirection:'column', background:'#f8fafc', fontFamily:FONT, overflow:'hidden' }}>
         <LiveHeader activeTabId="digital-twin" onNav={onNav} time={time} />
-        <div style={{ flex:1, overflow:'hidden' }}>
-          <JsonDisplay {...scadaProps} />
-        </div>
+        {/* Show a loading screen until the first DB fetch resolves so no
+            stale hardcoded data ever flashes on screen. */}
+        {!dataLoaded
+          ? <ScadaLoadingScreen />
+          : (
+            <div style={{ flex:1, overflow:'hidden' }}>
+              <JsonDisplay {...scadaProps} />
+            </div>
+          )
+        }
       </div>
     );
   }
@@ -528,9 +748,14 @@ useEffect(() => {
     return (
       <div style={{ width:'100vw', height:'100vh', display:'flex', flexDirection:'column', background:'#f8fafc', fontFamily:FONT, overflow:'hidden' }}>
         <LiveHeader activeTabId="controls" onNav={onNav} time={time} />
-        <div style={{ flex:1, overflow:'auto' }}>
-          <ControlPanelPage {...scadaProps} />
-        </div>
+        {!dataLoaded
+          ? <ScadaLoadingScreen />
+          : (
+            <div style={{ flex:1, overflow:'auto' }}>
+              <ControlPanelPage {...scadaProps} />
+            </div>
+          )
+        }
       </div>
     );
   }
@@ -613,7 +838,7 @@ useEffect(() => {
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:22, maxWidth:920, margin:'0 auto' }}>
           {[
-            { icon:'⚡', title:'Real-Time Monitoring',  desc:'Live tank levels, pipe flow rates and valve states updated every 200ms.' },
+            { icon:'⚡', title:'Real-Time Monitoring',  desc:'Live tank levels, pipe flow rates and valve states updated every second via local simulation, synced to the database every 5 s.' },
             { icon:'🎛️', title:'Full Valve Control',    desc:'Open or close any valve from the Controls tab. Watch flow paths respond instantly.' },
             { icon:'📉', title:'Smart Auto-Stop',       desc:'Flow auto-stops when tanks are full or the sump source runs empty.' },
             { icon:'🗺️', title:'Zone Navigation',       desc:'Click any zone flowmeter to drill into its dedicated zone distribution view.' },

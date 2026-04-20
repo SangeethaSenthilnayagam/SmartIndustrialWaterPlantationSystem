@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { fetchTanks, updateTankLevel, fetchFlowMeters, updateFlowRate, fetchValves, toggleValve } from '../services/api';
+import React, { useState, useCallback } from 'react';
 
 // ─── Exported constants (fallback defaults) ──────────────────────────────────
 export const INITIAL_LEVELS = {
@@ -13,15 +12,15 @@ export const INITIAL_FLOWS = {
 };
 export const INITIAL_VALVE_STATES = {
   'valve-main-001': true,
-  'valve-oht-01': true, 'valve-glsr-01': true,
-  'valve-oht-02': true, 'valve-glsr-02': true,
-  'valve-oht-03': true, 'valve-glsr-03': true,
+  'valve-oht-01': true,  'valve-glsr-01': true,
+  'valve-oht-02': true,  'valve-glsr-02': true,
+  'valve-oht-03': true,  'valve-glsr-03': true,
 };
 export const CONIC_INITIAL_LEVEL = 75;
 
 const FONT = "'Courier New', monospace";
 
-// ─── All tanks ──────────────────────────────────────────────────────────────
+// ─── All tanks ───────────────────────────────────────────────────────────────
 const ALL_TANKS = [
   { id:'oht-01',  fm:'flowmeter-oht-01',  valveId:'valve-oht-01',  type:'OHT',  label:'OHT-01',  sub:'Kumar Swamy',  zone:'Zone-04', color:'#ef9f27' },
   { id:'oht-02',  fm:'flowmeter-oht-02',  valveId:'valve-oht-02',  type:'OHT',  label:'OHT-02',  sub:'Nearby GLSR',  zone:'Zone-07', color:'#ef9f27' },
@@ -31,7 +30,7 @@ const ALL_TANKS = [
   { id:'glsr-03', fm:'flowmeter-glsr-03', valveId:'valve-glsr-03', type:'GLSR', label:'GLSR-03', sub:'Guttahalli',   zone:'Zone-01', color:'#378ADD' },
 ];
 
-// ─── OHT SVG large (unchanged) ───────────────────────────────────────────────
+// ─── OHT SVG large ───────────────────────────────────────────────────────────
 function OHTImage({ level = 50, color = '#ef9f27', size = 200 }) {
   const fillH   = Math.max(0, Math.min(1, level / 100));
   const tankH   = size * 0.44;
@@ -50,7 +49,8 @@ function OHTImage({ level = 50, color = '#ef9f27', size = 200 }) {
       <defs>
         <clipPath id="coht_l"><rect x={cx-tw/2+1} y={tankY} width={tw-2} height={tankH} rx={size*0.03}/></clipPath>
         <linearGradient id="goht_l" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#1a3a5a"/><stop offset="100%" stopColor="#0d2030"/>
+          <stop offset="0%"   stopColor="#1a3a5a"/>
+          <stop offset="100%" stopColor="#0d2030"/>
         </linearGradient>
       </defs>
       {[-gap,0,gap].map((ox,i)=>(
@@ -75,7 +75,7 @@ function OHTImage({ level = 50, color = '#ef9f27', size = 200 }) {
   );
 }
 
-// ─── GLSR SVG large (unchanged) ──────────────────────────────────────────────
+// ─── GLSR SVG large ──────────────────────────────────────────────────────────
 function GLSRImage({ level = 60, color = '#378ADD', size = 200 }) {
   const fillH   = Math.max(0, Math.min(1, level / 100));
   const tw      = size * 0.78;
@@ -91,7 +91,8 @@ function GLSRImage({ level = 60, color = '#378ADD', size = 200 }) {
       <defs>
         <clipPath id="cglsr_l"><rect x={tx+1} y={ty} width={tw-2} height={th}/></clipPath>
         <linearGradient id="gglsr_l" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#1a3a5a"/><stop offset="100%" stopColor="#0d2030"/>
+          <stop offset="0%"   stopColor="#1a3a5a"/>
+          <stop offset="100%" stopColor="#0d2030"/>
         </linearGradient>
       </defs>
       <rect x={tx-size*0.04} y={ty+th} width={tw+size*0.08} height={size*0.065} rx={size*0.012} fill="#1e3a5a"/>
@@ -137,7 +138,7 @@ function OHTThumb({ level, color }) {
   );
 }
 
-// ─── Small GLSR thumbnail ─────────────────────────────────────────────────────
+// ─── Small GLSR thumbnail ────────────────────────────────────────────────────
 function GLSRThumb({ level, color }) {
   const s=44, fillH=Math.max(0,Math.min(1,level/100)), tw=s*0.78, th=s*0.37;
   const tx=(s-tw)/2, ty=s*0.30, fillHpx=th*fillH, fillY=ty+th-fillHpx, wc=level<25?'#e74c3c':'#38b2f8', cx=s/2;
@@ -152,9 +153,16 @@ function GLSRThumb({ level, color }) {
   );
 }
 
-// 🔧 FIXED: Enhanced Slider with cross-browser styles
+// ─────────────────────────────────────────────────────────────────────────────
+// SLIDER — FIX: dynamic linear-gradient background fills the track left of thumb
+// The previous approach used background:'transparent' + a CSS variable on a ref.
+// That only coloured the thumb, never the filled portion of the track.
+// Now we compute pct and apply the gradient directly in the style prop, which
+// works in both Chrome/WebKit and Firefox without any ref tricks.
+// ─────────────────────────────────────────────────────────────────────────────
 function Slider({ val, min, max, step, onChange, color }) {
-  const pct = ((val - min) / (max - min)) * 100;
+  const pct = Math.max(0, Math.min(100, ((val - min) / (max - min)) * 100));
+  const trackFill = `linear-gradient(to right, ${color} 0%, ${color} ${pct}%, #cbd5e1 ${pct}%, #cbd5e1 100%)`;
   return (
     <input
       type="range"
@@ -165,23 +173,21 @@ function Slider({ val, min, max, step, onChange, color }) {
       onChange={e => onChange(parseFloat(e.target.value))}
       style={{
         width: '100%',
-        height: 6,                      // Ensure enough height for thumb
+        height: 6,
         borderRadius: 3,
         outline: 'none',
         cursor: 'pointer',
         WebkitAppearance: 'none',
         appearance: 'none',
-        background: 'transparent',      // We'll use the gradient on the track pseudo-element
+        background: trackFill,
+        // Store colour for thumb pseudo-elements via CSS variable
+        '--thumb-color': color,
       }}
-      // 🔧 FIXED: Use CSS custom properties for dynamic gradient
-      onMouseEnter={e => e.currentTarget.style.setProperty('--slider-color', color)}
-      onMouseLeave={e => e.currentTarget.style.setProperty('--slider-color', color)}
-      ref={el => el && el.style.setProperty('--slider-color', color)}
     />
   );
 }
 
-// ─── Sensor Card (unchanged) ─────────────────────────────────────────────────
+// ─── Sensor Card ─────────────────────────────────────────────────────────────
 function SensorCard({ label, value, unit, pct, col, icon }) {
   return (
     <div style={{ background:'#f8fafc', border:'1px solid #cbd5e1', borderRadius:8, padding:'11px 13px' }}>
@@ -200,7 +206,7 @@ function SensorCard({ label, value, unit, pct, col, icon }) {
   );
 }
 
-// ─── Left Panel Tank Card (draggable) ─────────────────────────────────────────
+// ─── Left Panel Tank Card (draggable) ────────────────────────────────────────
 function LeftTankCard({ tank, level, isActive, onSelect }) {
   const isOHT = tank.type === 'OHT';
   const col   = level < 25 ? '#f44336' : tank.color;
@@ -237,7 +243,7 @@ function LeftTankCard({ tank, level, isActive, onSelect }) {
   );
 }
 
-// ─── Center: Single Tank Detail View ──────────────────────────────────────────
+// ─── Center: Single Tank Detail View ─────────────────────────────────────────
 function TankDetailView({ tank, level, flow, valveOpen, effectiveFilling,
   onLevelChange, onFlowChange, onValveToggle, isDragOver, onDrop, onDragOver, onDragLeave }) {
   const isOHT = tank.type === 'OHT';
@@ -297,7 +303,7 @@ function TankDetailView({ tank, level, flow, valveOpen, effectiveFilling,
       {/* Body */}
       <div style={{ flex:1, display:'flex', overflow:'hidden' }}>
 
-        {/* Left: big tank SVG + level + valve */}
+        {/* Left: big tank SVG + level slider + valve */}
         <div style={{
           width:270, flexShrink:0,
           display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
@@ -318,11 +324,14 @@ function TankDetailView({ tank, level, flow, valveOpen, effectiveFilling,
             <div style={{ height:6, background:'#cbd5e1', borderRadius:3, overflow:'hidden', marginBottom:7 }}>
               <div style={{ width:`${level}%`, height:'100%', background:col, borderRadius:3, transition:'width 0.4s' }}/>
             </div>
-            <Slider val={level} min={0} max={100} step={1} onChange={v=>onLevelChange(tank.id,v)} color={col}/>
+            {/* FIX: pass tank.id so the callback fires with the right ID */}
+            <Slider val={level} min={0} max={100} step={1}
+              onChange={v => onLevelChange && onLevelChange(tank.id, v)}
+              color={col}/>
           </div>
 
-          {/* Valve */}
-          <button onClick={()=>onValveToggle(tank.valveId)} style={{
+          {/* Valve toggle button */}
+          <button onClick={()=>onValveToggle && onValveToggle(tank.valveId)} style={{
             display:'inline-flex', alignItems:'center', gap:6,
             padding:'6px 16px', borderRadius:6, cursor:'pointer', fontWeight:700,
             fontSize:10, fontFamily:FONT,
@@ -343,7 +352,7 @@ function TankDetailView({ tank, level, flow, valveOpen, effectiveFilling,
           </div>
         </div>
 
-        {/* Right: sensors + flow */}
+        {/* Right: sensors + flow slider */}
         <div style={{ flex:1, padding:'18px 20px', overflowY:'auto', display:'flex', flexDirection:'column', gap:14 }}>
 
           {/* Flow control */}
@@ -360,7 +369,9 @@ function TankDetailView({ tank, level, flow, valveOpen, effectiveFilling,
             <div style={{ height:5, background:'#cbd5e1', borderRadius:3, overflow:'hidden', marginBottom:8 }}>
               <div style={{ width:`${flowPct}%`, height:'100%', background:flow>0?'#38b2f8':'#3a6080', borderRadius:3, transition:'width 0.4s' }}/>
             </div>
-            <Slider val={flow} min={0} max={150} step={0.5} onChange={v=>onFlowChange(tank.fm,v)} color={flow>0?'#38b2f8':'#3a6080'}/>
+            <Slider val={flow} min={0} max={150} step={0.5}
+              onChange={v => onFlowChange && onFlowChange(tank.fm, v)}
+              color={flow>0?'#38b2f8':'#3a6080'}/>
             <div style={{ marginTop:6, fontSize:7, color:'#64748b', fontFamily:FONT }}>Flowmeter: {tank.fm}</div>
           </div>
 
@@ -408,21 +419,27 @@ function TankDetailView({ tank, level, flow, valveOpen, effectiveFilling,
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
+//
+// FIX: Prop destructuring was wrong — props were named e.g. `levels: externalLevels`
+// which means "accept a prop called 'levels' and rename it to externalLevels".
+// But Home.js passes props literally named externalLevels, externalFlows, etc.
+// They never matched, so all data was undefined and fell back to hardcoded
+// INITIAL_* constants. Changed to receive the props by their actual names.
 // ─────────────────────────────────────────────────────────────────────────────
 export default function ControlPanelPage({
-  levels: externalLevels,
-  flows: externalFlows,
-  conicLevel: externalConicLevel,
-  valveStates: externalValveStates,
-  onFlowChange: externalOnFlowChange,
+  externalLevels,       // FIX: was `levels: externalLevels`
+  externalFlows,        // FIX: was `flows: externalFlows`
+  externalConicLevel,   // FIX: was `conicLevel: externalConicLevel`
+  externalValveStates,  // FIX: was `valveStates: externalValveStates`
+  onFlowChange:  externalOnFlowChange,
   onLevelChange: externalOnLevelChange,
-  onReset: externalOnReset,
+  onReset:       externalOnReset,
   onValveToggle: externalOnValveToggle,
 }) {
   const [activeTankId, setActiveTankId] = useState('oht-01');
   const [isDragOver,   setIsDragOver]   = useState(false);
 
-  // 🔧 FIXED: Provide fallback empty objects to avoid undefined errors
+  // Fallback to hardcoded defaults only when the backend hasn't responded yet
   const levels      = externalLevels      ?? INITIAL_LEVELS;
   const flows       = externalFlows       ?? INITIAL_FLOWS;
   const conicLevel  = externalConicLevel  ?? CONIC_INITIAL_LEVEL;
@@ -447,7 +464,7 @@ export default function ControlPanelPage({
   const valveOpen = valveStates[activeTank.valveId] ?? true;
   const effectiveFilling = mainFlow > 0 && masterOpen && valveOpen;
 
-  // Alerts
+  // Alert generation
   const alerts = [];
   if (conicLevel <= 0)      alerts.push({ t:'danger', m:'SUMP — empty! Flow stopped' });
   else if (conicLevel < 25) alerts.push({ t:'warn',   m:`SUMP low (${Math.round(conicLevel)}%)` });
@@ -472,10 +489,14 @@ export default function ControlPanelPage({
           <div style={{ fontSize:7, color:'#64748b', marginTop:1 }}>Click or drag a tank card from the left panel to view its details in the center</div>
         </div>
         <div style={{ marginLeft:'auto', display:'flex', gap:8, alignItems:'center' }}>
+
+          {/* Sump indicator */}
           <div style={{ padding:'4px 10px', borderRadius:5, background:'#ffffff', border:`1px solid ${conicLevel<25?'#f4433640':'#cbd5e1'}` }}>
             <div style={{ fontSize:7, color:'#64748b' }}>SUMP</div>
             <div style={{ fontSize:11, fontWeight:700, color:conicLevel<25?'#ef9f27':'#38b2f8', fontFamily:FONT }}>{Math.round(conicLevel)}%</div>
           </div>
+
+          {/* V-MAIN toggle */}
           <div style={{ padding:'4px 10px', borderRadius:5, display:'flex', alignItems:'center', gap:6,
             background:masterOpen?'#f0fdf4':'#fff5f5', border:`1px solid ${masterOpen?'#4caf5040':'#f4433640'}` }}>
             <div style={{ fontSize:7, color:'#64748b' }}>V-MAIN</div>
@@ -488,18 +509,24 @@ export default function ControlPanelPage({
               {masterOpen?'OPEN':'CLOSED'}
             </button>
           </div>
+
+          {/* Main inlet flow slider */}
           <div style={{ padding:'4px 10px', borderRadius:5, background:'#ffffff', border:`1px solid ${mainFlow>0?'#38b2f840':'#cbd5e1'}`, minWidth:130 }}>
             <div style={{ display:'flex', justifyContent:'space-between', marginBottom:2 }}>
               <span style={{ fontSize:7, color:'#64748b' }}>MAIN INLET</span>
               <span style={{ fontSize:8, fontWeight:700, color:mainFlow>0?'#38b2f8':'#3a6080', fontFamily:FONT }}>{mainFlow.toFixed(1)} m³/h</span>
             </div>
-            <Slider val={mainFlow} min={0} max={150} step={0.5} onChange={v=>externalOnFlowChange && externalOnFlowChange('flowmeter-001',v)} color="#38b2f8"/>
+            <Slider val={mainFlow} min={0} max={150} step={0.5}
+              onChange={v=>externalOnFlowChange && externalOnFlowChange('flowmeter-001',v)}
+              color="#38b2f8"/>
           </div>
+
           <span style={{ fontSize:8, padding:'4px 11px', borderRadius:20, fontWeight:700,
             background:anyFlow?'#f0fdf4':'#fff5f5', color:anyFlow?'#16a34a':'#dc2626',
             border:`1px solid ${anyFlow?'#86efac':'#fca5a5'}` }}>
             {anyFlow?'● FLOWING':'● IDLE'}
           </span>
+
           <button onClick={externalOnReset} style={{
             padding:'5px 13px', borderRadius:5, cursor:'pointer', fontSize:8, fontWeight:700,
             fontFamily:FONT, background:'#fef2f2', color:'#ef4444', border:'1px solid #fca5a5', letterSpacing:'.04em',
@@ -545,7 +572,7 @@ export default function ControlPanelPage({
 
             <div style={{ borderTop:'1px solid #cbd5e1', margin:'10px 0 8px' }}/>
 
-            {/* Summary */}
+            {/* Summary stats */}
             <div style={{ fontSize:8, color:'#64748b', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:6 }}>Summary</div>
             {[
               { l:'Active Lines', v:`${Object.entries(flows).filter(([k,v])=>k!=='flowmeter-001'&&v>0).length}/${Object.keys(flows).length-1}`, c:'#4caf50' },
@@ -572,7 +599,7 @@ export default function ControlPanelPage({
 
             <div style={{ borderTop:'1px solid #cbd5e1', margin:'10px 0 8px' }}/>
 
-            {/* Sump */}
+            {/* Sump / Source */}
             <div style={{ fontSize:8, color:'#64748b', textTransform:'uppercase', letterSpacing:'.07em', marginBottom:6 }}>Sump / Source</div>
             <div style={{ padding:'7px 8px', borderRadius:7, background:'#f4f7fb', border:`1px solid ${conicLevel<25?'#f4433630':'#cbd5e1'}` }}>
               <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
@@ -606,67 +633,47 @@ export default function ControlPanelPage({
         </div>
       </div>
 
-      {/* 🔧 FIXED: Comprehensive cross-browser slider styles */}
+      {/* Global CSS — slider thumb + scrollbar + pulse animation */}
       <style>{`
         ::-webkit-scrollbar{width:3px;height:3px}
         ::-webkit-scrollbar-track{background:#f0f4f8}
         ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px}
         @keyframes cpulse{0%,100%{opacity:1}50%{opacity:0.18}}
 
-        /* Slider track styles for WebKit */
-        input[type=range] {
-          --slider-color: #38b2f8;
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-          width: 100%;
-          height: 6px;
-          background: #cbd5e1;
-          border-radius: 3px;
-          border: none;
-        }
+        /* Thumb styles — colour comes from --thumb-color set via style prop */
         input[type=range]::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: var(--slider-color, #38b2f8);
+          background: var(--thumb-color, #38b2f8);
+          border: 2px solid white;
           margin-top: -5px;
           cursor: pointer;
-          box-shadow: 0 0 8px var(--slider-color, #38b2f8);
-          border: 2px solid white;
+          box-shadow: 0 0 6px var(--thumb-color, #38b2f8);
         }
-        input[type=range]:focus {
-          outline: none;
-        }
-        input[type=range]:focus::-webkit-slider-runnable-track {
-          background: #b0bec5;
-        }
-
-        /* Slider track styles for Firefox */
-        input[type=range]::-moz-range-track {
-          width: 100%;
+        input[type=range]::-webkit-slider-runnable-track {
           height: 6px;
-          background: #cbd5e1;
           border-radius: 3px;
           border: none;
+          /* track background is set dynamically via the element's background style */
         }
+        input[type=range]:focus { outline: none; }
+
         input[type=range]::-moz-range-thumb {
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: var(--slider-color, #38b2f8);
+          background: var(--thumb-color, #38b2f8);
           border: 2px solid white;
           cursor: pointer;
-          box-shadow: 0 0 8px var(--slider-color, #38b2f8);
+          box-shadow: 0 0 6px var(--thumb-color, #38b2f8);
         }
-        input[type=range]::-moz-range-progress {
-          background: var(--slider-color, #38b2f8);
+        input[type=range]::-moz-range-track {
           height: 6px;
           border-radius: 3px;
-        }
-        /* For Firefox, the gradient approach doesn't work, so we use a solid progress color */
-        input[type=range] {
+          border: none;
           background: transparent;
         }
       `}</style>

@@ -34,25 +34,32 @@ func main() {
 	}
 	r.Use(cors.New(corsConfig))
 
-	// ──────────────────────────────────────────────────────────────────────
-	// API Routes – MUST MATCH EXACTLY WITH FRONTEND CALLS
-	// ──────────────────────────────────────────────────────────────────────
 	api := r.Group("/api")
 	{
-		// Dashboard
+		// ── Dashboard (single call) ─────────────────────────────────────────────
 		api.GET("/dashboard", handlers.GetDashboard)
 
-		// Tanks
+		// ── Tanks ───────────────────────────────────────────────────────────────
 		api.GET("/tanks", handlers.GetTanks)
 		api.PUT("/tanks/:code/level", handlers.UpdateTankLevel)
 
-		// Flow meters
+		// ── Flow meters ─────────────────────────────────────────────────────────
 		api.GET("/flowmeters", handlers.GetFlowMeters)
 		api.PUT("/flowmeters/:code/flow", handlers.UpdateFlowRate)
 
-		// Valves
+		// ── Valves ──────────────────────────────────────────────────────────────
 		api.GET("/valves", handlers.GetValves)
 		api.PUT("/valves/:code/toggle", handlers.ToggleValve)
+
+		// ── Maintenance tasks ───────────────────────────────────────────────────
+		api.GET("/maintenance/tasks", handlers.GetMaintenanceTasks)
+		api.PUT("/maintenance/tasks/:id/status", handlers.UpdateMaintenanceTaskStatus)
+
+		// ── Simulation / Excel import ────────────────────────────────────────────
+		api.POST("/simulation/upload", handlers.UploadSimulation)
+		api.GET("/simulation/timerange", handlers.GetSimulationTimeRange)
+		api.GET("/simulation/snapshot", handlers.GetSimulationSnapshot)
+		api.GET("/simulation/stream", handlers.SimulationStream)
 	}
 
 	port := os.Getenv("API_PORT")

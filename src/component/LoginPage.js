@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 const FONT = "'Courier New', monospace";
@@ -10,7 +9,7 @@ function Field({ label, type = 'text', value, onChange, placeholder, autoComplet
     <div style={{ marginBottom: 18 }}>
       <label style={{
         display: 'block', fontSize: 9, fontWeight: 700,
-        color: '#4a7a9b', textTransform: 'uppercase', letterSpacing: '.09em', marginBottom: 7,
+        color: '#64748b', textTransform: 'uppercase', letterSpacing: '.09em', marginBottom: 7,
         fontFamily: FONT,
       }}>
         {label}
@@ -26,9 +25,9 @@ function Field({ label, type = 'text', value, onChange, placeholder, autoComplet
         style={{
           width: '100%', boxSizing: 'border-box',
           padding: '11px 14px', borderRadius: 7,
-          background: focused ? '#0a1628' : '#060f1a',
-          border: `1px solid ${focused ? '#38b2f8' : '#1e3a5c'}`,
-          color: '#e8f4ff', fontSize: 12, fontFamily: FONT,
+          background: focused ? '#ffffff' : '#f8fafc',
+          border: `1px solid ${focused ? '#38b2f8' : '#cbd5e1'}`,
+          color: '#1e293b', fontSize: 12, fontFamily: FONT,
           outline: 'none', transition: 'all 0.2s',
           boxShadow: focused ? '0 0 0 3px rgba(56,178,248,0.12)' : 'none',
         }}
@@ -63,7 +62,7 @@ export default function LoginPage({ onBack }) {
 
   return (
     <div style={{
-      minHeight: '100vh', background: '#060f1a',
+      minHeight: '100vh', background: '#f8fafc',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontFamily: FONT, padding: '40px 20px', boxSizing: 'border-box',
       position: 'relative', overflow: 'hidden',
@@ -102,14 +101,14 @@ export default function LoginPage({ onBack }) {
 
         {/* Card */}
         <div style={{
-          background: '#08121e', borderRadius: 16, overflow: 'hidden',
-          border: '1px solid #1e3a5c',
+          background: '#f1f5f9', borderRadius: 16, overflow: 'hidden',
+          border: '1px solid #cbd5e1',
           boxShadow: '0 24px 60px rgba(0,0,0,0.5), 0 0 40px rgba(56,178,248,0.06)',
         }}>
           {/* Card header */}
           <div style={{
-            background: 'linear-gradient(135deg, #041428, #061c3a)',
-            padding: '28px 32px 24px', borderBottom: '1px solid #1e3a5c',
+            background: 'linear-gradient(135deg, #eff6ff, #dbeafe)',
+            padding: '28px 32px 24px', borderBottom: '1px solid #cbd5e1',
           }}>
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
@@ -127,7 +126,7 @@ export default function LoginPage({ onBack }) {
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#38b2f8', letterSpacing: '.08em', lineHeight: 1 }}>
                   AQUA TWIN
                 </div>
-                <div style={{ fontSize: 8, color: '#4a7a9b', letterSpacing: '.12em', marginTop: 2 }}>
+                <div style={{ fontSize: 8, color: '#64748b', letterSpacing: '.12em', marginTop: 2 }}>
                   WATER MANAGEMENT SYSTEM
                 </div>
               </div>
@@ -135,7 +134,7 @@ export default function LoginPage({ onBack }) {
 
             {/* Mode tabs */}
             <div style={{
-              display: 'flex', background: '#060f1a', borderRadius: 8,
+              display: 'flex', background: '#f8fafc', borderRadius: 8,
               padding: 4, gap: 4,
             }}>
               {['login', 'register'].map(m => (
@@ -145,7 +144,7 @@ export default function LoginPage({ onBack }) {
                     fontSize: 11, fontWeight: 700, letterSpacing: '.05em', textTransform: 'uppercase',
                     fontFamily: FONT, border: 'none', transition: 'all 0.2s',
                     background: mode === m ? 'linear-gradient(135deg, #0ea5e9, #0369a1)' : 'transparent',
-                    color:      mode === m ? '#fff' : '#4a7a9b',
+                    color:      mode === m ? '#fff' : '#64748b',
                     boxShadow:  mode === m ? '0 2px 10px #0ea5e933' : 'none',
                   }}>
                   {m === 'login' ? 'Sign In' : 'Register'}
@@ -196,7 +195,7 @@ export default function LoginPage({ onBack }) {
             {status && (
               <div style={{
                 padding: '10px 14px', borderRadius: 7, marginBottom: 16,
-                background: status === 'success' ? '#0a1f0a' : '#1f0a0a',
+                background: status === 'success' ? '#f0fdf4' : '#fff5f5',
                 border:     `1px solid ${status === 'success' ? '#4caf5044' : '#f4433644'}`,
                 color:      status === 'success' ? '#4caf50' : '#f44336',
                 fontSize: 11, lineHeight: 1.5,
@@ -221,9 +220,9 @@ export default function LoginPage({ onBack }) {
 
             {/* Divider */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-              <div style={{ flex: 1, height: 1, background: '#1e3a5c' }}/>
-              <span style={{ fontSize: 9, color: '#4a7a9b', textTransform: 'uppercase', letterSpacing: '.07em' }}>or</span>
-              <div style={{ flex: 1, height: 1, background: '#1e3a5c' }}/>
+              <div style={{ flex: 1, height: 1, background: '#cbd5e1' }}/>
+              <span style={{ fontSize: 9, color: '#64748b', textTransform: 'uppercase', letterSpacing: '.07em' }}>or</span>
+              <div style={{ flex: 1, height: 1, background: '#cbd5e1' }}/>
             </div>
 
             {/* Back to home */}
@@ -231,11 +230,11 @@ export default function LoginPage({ onBack }) {
               <button type="button" onClick={onBack} style={{
                 width: '100%', padding: '11px', borderRadius: 7, cursor: 'pointer',
                 fontSize: 11, fontWeight: 700, letterSpacing: '.05em',
-                background: 'transparent', color: '#7eabcb',
-                border: '1px solid #1e3a5c', fontFamily: FONT, transition: 'all 0.2s',
+                background: 'transparent', color: '#475569',
+                border: '1px solid #cbd5e1', fontFamily: FONT, transition: 'all 0.2s',
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = '#38b2f8'; e.currentTarget.style.color = '#38b2f8'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = '#1e3a5c'; e.currentTarget.style.color = '#7eabcb'; }}>
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.color = '#475569'; }}>
                 ← Back to Home
               </button>
             )}
@@ -243,8 +242,8 @@ export default function LoginPage({ onBack }) {
 
           {/* Footer note */}
           <div style={{
-            padding: '12px 32px 16px', borderTop: '1px solid #1e3a5c',
-            fontSize: 9, color: '#4a7a9b', textAlign: 'center', lineHeight: 1.6,
+            padding: '12px 32px 16px', borderTop: '1px solid #cbd5e1',
+            fontSize: 9, color: '#64748b', textAlign: 'center', lineHeight: 1.6,
           }}>
             By signing in you agree to our Terms of Service and Privacy Policy.
             <br />Secure access · AquaTwin SCADA Platform
