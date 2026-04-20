@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as joint from '@joint/core';
 import config from '../config/complete-scada-config.json';
@@ -35,8 +34,8 @@ const ALL_LINK_PIPE_IDS = [
 // ─── Constants ────────────────────────────────────────────────────────────────
 // Must match LargeOHTank's tankBody.height in complete-scada-config.json
 const TANK_BODY_HEIGHT   = 120;
-const BG_IDLE            = '#0d1b2e';
-const BG_FLOWING         = '#0f2240';
+const BG_IDLE            = '#f1f5f9';
+const BG_FLOWING         = '#dbeafe';
 const PIPE_COLOR_IDLE    = '#2a4a6a';
 const PIPE_COLOR_FLOWING = '#38b2f8';
 
@@ -96,7 +95,7 @@ function liquidAttrs(levelPct) {
 }
 
 function flowColor(val) {
-  if (val <= 0) return '#4a7a9b';
+  if (val <= 0) return '#64748b';
   if (val < 40) return '#f5a623';
   if (val < 80) return '#4caf50';
   return '#38b2f8';
@@ -116,7 +115,7 @@ function BranchControlPanel({ level, flow, zoneInfo, onLevelChange, onFlowChange
           width: '100%', height: 3, borderRadius: 2,
           outline: 'none', cursor: 'pointer',
           WebkitAppearance: 'none', appearance: 'none',
-          background: `linear-gradient(to right,${color} ${pct}%,#1e3a5c ${pct}%)`,
+          background: `linear-gradient(to right,${color} ${pct}%,#cbd5e1 ${pct}%)`,
         }}
       />
     );
@@ -124,14 +123,14 @@ function BranchControlPanel({ level, flow, zoneInfo, onLevelChange, onFlowChange
 
   return (
     <div style={{
-      width: '100%', height: '100%', background: '#0d1b2e',
-      borderLeft: '1px solid #1e3a5c', display: 'flex', flexDirection: 'column',
-      fontFamily: "'Courier New',monospace", overflow: 'hidden', color: '#e8f4ff',
+      width: '100%', height: '100%', background: '#f1f5f9',
+      borderLeft: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column',
+      fontFamily: "'Courier New',monospace", overflow: 'hidden', color: '#1e293b',
     }}>
       {/* ── Header ── */}
       <div style={{
-        background: '#0a1628', borderBottom: '1px solid #1e3a5c',
-        color: '#7eabcb', padding: '10px 14px', flexShrink: 0,
+        background: '#ffffff', borderBottom: '1px solid #cbd5e1',
+        color: '#475569', padding: '10px 14px', flexShrink: 0,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       }}>
         <div>
@@ -139,7 +138,7 @@ function BranchControlPanel({ level, flow, zoneInfo, onLevelChange, onFlowChange
             {zoneInfo?.zoneName || 'Zone Distribution'}
           </span>
           {zoneInfo?.tankLabel && (
-            <div style={{ fontSize: 9, color: '#4a7a9b', marginTop: 2 }}>{zoneInfo.tankLabel}</div>
+            <div style={{ fontSize: 9, color: '#64748b', marginTop: 2 }}>{zoneInfo.tankLabel}</div>
           )}
         </div>
         <span style={{
@@ -157,11 +156,11 @@ function BranchControlPanel({ level, flow, zoneInfo, onLevelChange, onFlowChange
         {/* ── Tank Level card ── */}
         <div style={{
           marginBottom: 12, padding: '10px 12px', borderRadius: 8,
-          background: '#132236', border: `1px solid ${barCol}44`,
+          background: '#e2e8f0', border: `1px solid ${barCol}44`,
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
             <div>
-              <div style={{ fontSize: 9, color: '#4a7a9b', textTransform: 'uppercase', letterSpacing: '.07em' }}>
+              <div style={{ fontSize: 9, color: '#64748b', textTransform: 'uppercase', letterSpacing: '.07em' }}>
                 {zoneInfo?.tankId || 'OHT-New'}
               </div>
               <div style={{ fontSize: 18, fontWeight: 700, color: barCol, lineHeight: 1.1 }}>
@@ -170,20 +169,20 @@ function BranchControlPanel({ level, flow, zoneInfo, onLevelChange, onFlowChange
             </div>
             <span style={{
               fontSize: 9, padding: '2px 8px', borderRadius: 20, alignSelf: 'flex-start',
-              background: level < 25 ? '#2a1515' : '#1e3a5c',
+              background: level < 25 ? '#2a1515' : '#cbd5e1',
               color:      level < 25 ? '#f44336' : '#64b5f6',
-              border: `1px solid ${level < 25 ? '#f4433644' : '#2a5a8c'}`,
+              border: `1px solid ${level < 25 ? '#f4433644' : '#94a3b8'}`,
               fontWeight: 600,
             }}>
               {level < 25 ? 'CRITICAL' : 'Normal'}
             </span>
           </div>
           {/* Fill bar */}
-          <div style={{ background: '#0a1628', borderRadius: 3, height: 5, marginBottom: 8, overflow: 'hidden' }}>
+          <div style={{ background: '#ffffff', borderRadius: 3, height: 5, marginBottom: 8, overflow: 'hidden' }}>
             <div style={{ width: `${level}%`, height: '100%', background: barCol, borderRadius: 3, transition: 'width 0.4s' }} />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span style={{ fontSize: 9, color: '#4a7a9b', textTransform: 'uppercase', letterSpacing: '.05em' }}>Level</span>
+            <span style={{ fontSize: 9, color: '#64748b', textTransform: 'uppercase', letterSpacing: '.05em' }}>Level</span>
             <span style={{ fontSize: 9, color: barCol, fontWeight: 700 }}>{Math.round(level)}%</span>
           </div>
           <Slider value={level} min={0} max={100} step={1} onChange={onLevelChange} color={barCol} />
@@ -192,30 +191,30 @@ function BranchControlPanel({ level, flow, zoneInfo, onLevelChange, onFlowChange
         {/* ── Flow card ── */}
         <div style={{
           marginBottom: 12, padding: '10px 12px', borderRadius: 8,
-          background: '#132236',
-          border: `1px solid ${flow > 0 ? '#38b2f844' : '#1e3a5c'}`,
+          background: '#e2e8f0',
+          border: `1px solid ${flow > 0 ? '#38b2f844' : '#cbd5e1'}`,
           transition: 'border-color 0.4s',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
             <div>
-              <div style={{ fontSize: 9, color: '#4a7a9b', textTransform: 'uppercase', letterSpacing: '.07em' }}>
+              <div style={{ fontSize: 9, color: '#64748b', textTransform: 'uppercase', letterSpacing: '.07em' }}>
                 {zoneInfo?.fmId ? `FM: ${zoneInfo.fmId}` : 'Main Flow'}
               </div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: flow > 0 ? '#38b2f8' : '#4a7a9b', lineHeight: 1.1 }}>
+              <div style={{ fontSize: 20, fontWeight: 700, color: flow > 0 ? '#38b2f8' : '#64748b', lineHeight: 1.1 }}>
                 {flow.toFixed(1)}<span style={{ fontSize: 10, marginLeft: 3 }}>m³/h</span>
               </div>
             </div>
             <span style={{
               fontSize: 9, padding: '2px 8px', borderRadius: 20,
-              background: flow > 0 ? '#1e3a5c' : '#1a1a2a',
-              color:      flow > 0 ? '#64b5f6' : '#4a7a9b',
-              border: '1px solid #1e3a5c',
+              background: flow > 0 ? '#cbd5e1' : '#1a1a2a',
+              color:      flow > 0 ? '#64b5f6' : '#64748b',
+              border: '1px solid #cbd5e1',
             }}>
               {flow > 0 ? 'Active' : 'Stopped'}
             </span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span style={{ fontSize: 9, color: '#4a7a9b', textTransform: 'uppercase', letterSpacing: '.05em' }}>Flow rate</span>
+            <span style={{ fontSize: 9, color: '#64748b', textTransform: 'uppercase', letterSpacing: '.05em' }}>Flow rate</span>
             <span style={{ fontSize: 9, color: flowColor(flow), fontWeight: 700 }}>{flow.toFixed(1)} m³/h</span>
           </div>
           <Slider value={flow} min={0} max={150} step={0.5} onChange={onFlowChange} color="#38b2f8" />
@@ -224,9 +223,9 @@ function BranchControlPanel({ level, flow, zoneInfo, onLevelChange, onFlowChange
         {/* ── Flow Path card ── */}
         <div style={{
           padding: '8px 10px', borderRadius: 8,
-          background: '#0a1628', border: '1px solid #1e3a5c',
+          background: '#ffffff', border: '1px solid #cbd5e1',
         }}>
-          <div style={{ fontSize: 9, color: '#4a7a9b', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 6 }}>
+          <div style={{ fontSize: 9, color: '#64748b', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 6 }}>
             Flow Path
           </div>
           {[
@@ -241,7 +240,7 @@ function BranchControlPanel({ level, flow, zoneInfo, onLevelChange, onFlowChange
                 boxShadow:  flow > 0 ? '0 0 5px #38b2f888' : 'none',
                 transition: 'background 0.3s, box-shadow 0.3s',
               }} />
-              <span style={{ fontSize: 9, color: flow > 0 ? '#a8d8f8' : '#4a7a9b', transition: 'color 0.3s' }}>
+              <span style={{ fontSize: 9, color: flow > 0 ? '#a8d8f8' : '#64748b', transition: 'color 0.3s' }}>
                 {label}
               </span>
               {i < arr.length - 1 && (
@@ -440,7 +439,7 @@ export default function Tap({ zoneInfo }) {
       height:             ph,
       model:              graph,
       gridSize:           config.paper?.gridSize || 10,
-      drawGrid:           { name: 'dot', args: { color: '#1e3a5c' } },
+      drawGrid:           { name: 'dot', args: { color: '#cbd5e1' } },
       background:         { color: BG_IDLE },
       cellViewNamespace:  joint.shapes,
       async:              false,
@@ -691,8 +690,8 @@ export default function Tap({ zoneInfo }) {
       {/* Control panel (15%) */}
       <div style={{
         width: '15%', height: '100vh', overflow: 'hidden',
-        borderLeft: '1px solid #1e3a5c', flexShrink: 0,
-        background: '#0d1b2e',
+        borderLeft: '1px solid #cbd5e1', flexShrink: 0,
+        background: '#f1f5f9',
       }}>
         <BranchControlPanel
           level={level}
